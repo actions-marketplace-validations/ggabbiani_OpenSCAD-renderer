@@ -1,0 +1,28 @@
+name: Live Test OpenSCAD
+on:
+  push:
+    branches: [ trunk ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v6
+
+      - name: Creazione immagine
+        uses: ./ # Punto alla root del mio repo dove c'è action.yml
+        with:
+          resolution: '800x600'
+          script: 'tests/logo.scad'   # Path relativo alla root del repo
+          picture: 'tests/logo.png'    # Sarà salvato qui
+          projection: 'ortho'
+
+      - name: Verifica e Archiviazione
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: openscad-result
+          path: tests/logo.png

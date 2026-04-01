@@ -1,0 +1,10 @@
+{
+    "fileHeaderComment.parameter": {
+        "*": {
+            "project_long": "OpenSCAD renderer",
+            "project_short": "OSCAD-REND",
+            "project_year": 2026
+        }
+    },
+    "fileHeaderComment.template": {},
+}
