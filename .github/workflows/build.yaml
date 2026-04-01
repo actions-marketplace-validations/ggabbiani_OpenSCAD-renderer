@@ -22,7 +22,8 @@ jobs:
 
     env:
       IMAGE_NAME: git-actions:fedora
-      DOCKER_IMAGE: {{ vars.DOCKERHUB_USERNAME }}/git-actions:fedora
+      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/git-actions:fedora"
+
 
     steps:
 
