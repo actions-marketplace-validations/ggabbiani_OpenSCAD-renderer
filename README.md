@@ -1,12 +1,12 @@
 # OpenSCAD-renderer
 
-HiRes rendering of OpenSCAD scripts
+HiRes rendering of OpenSCAD scripts.
 
-## inputs
+## Inputs
 
 | name      | required  | default       | description
 | ---       | ---       | ---           | ---
-| camera    | false     | -             | OpenSCAD camera position
+| camera    | false     | -             | OpenSCAD camera position (see [^1])
 | picture   | false     | [^2]          | Target picture name (e.g. pictures/pic_1.png)
 | projection| false     | 'perspective' | 'ortho' or 'perspective'
 | resolution| false     | 800x600       | Target image resolution in 'openscad' format (e.g. 1024x768)
