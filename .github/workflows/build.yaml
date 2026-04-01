@@ -14,9 +14,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# env:
-#   ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
-
 jobs:
 
   fedora:
@@ -25,7 +22,7 @@ jobs:
 
     env:
       IMAGE_NAME: git-actions:fedora
-      DOCKER_IMAGE: ggabbiani/git-actions:fedora
+      DOCKER_IMAGE: {{ vars.DOCKERHUB_USERNAME }}/git-actions:fedora
 
     steps:
 
