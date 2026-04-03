@@ -24,8 +24,8 @@ jobs:
         uses: ./ # repo path where to find action.yaml
         with:
           resolution: '800x600'
-          script:     'tests/logo.scad' # root relative path to OpenSCAD script
-          picture:    'tests/logo.png'  # root relative path to the produced image
+          script:     'tests/logo.scad'         # root relative path to OpenSCAD script
+          picture:    'tests/defaults-logo.png' # root relative path to the produced image
           projection: 'ortho'
 
       - name: Overriden inputs
@@ -33,5 +33,12 @@ jobs:
         with:
           resolution: '1024x768'
           script:     'tests/logo.scad'
-          picture:    'tests/logo.png'
+          picture:    'tests/overriden-logo.png'
           projection: 'ortho'
+
+      - name: Verifica e Archiviazione
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          path: tests/*.png
+
