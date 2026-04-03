@@ -29,9 +29,8 @@ jobs:
         uses: ./
         with:
           script:     'tests/logo.scad'
-          resolution: '1024x768'
-          picture:    'tests/overriden-logo.png'  # root relative path to the produced image
-          projection: 'ortho'
+          picture:    'tests/overriden-logo.png'  # picture name override
+          projection: 'ortho'                     # 'otho' projection override
 
       - name: Verifica e Archiviazione
         if: success()
