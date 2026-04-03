@@ -124,9 +124,8 @@ echo "Verifica dimensioni finali..."
 FINAL_GEOMETRY=$(identify -format "%wx%h" "$PIC_PATH")
 if [ "$FINAL_GEOMETRY" != "${RESIZE#-resize }" ]; then
   # Nota: ${RESIZE#-resize } estrae "800x600" dalla variabile $RESIZE
-  echo "Errore: Dimensioni attese ${RESIZE#-resize }, ottenute $FINAL_GEOMETRY"
-  exit 5
+  fail 4 "Errore: Dimensioni attese ${RESIZE#-resize }, ottenute $FINAL_GEOMETRY"
 fi
 
-echo "✅ Rendering verificato: $FINAL_GEOMETRY"
+echo "✅ actual size: $FINAL_GEOMETRY"
 exit 0
