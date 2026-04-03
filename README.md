@@ -32,6 +32,6 @@ The resulting picture will be saved as `tests/logo.png` with te default 800x600 
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:
       resolution: '1024x768'
-      script: 'tests/logo.scad'
-      picture: 'tests/logo-overridden.png'
+      script:     'tests/logo.scad'
+      picture:    'tests/logo-overridden.png'
       projection: 'ortho'

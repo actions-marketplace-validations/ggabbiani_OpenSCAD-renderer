@@ -12,17 +12,18 @@ jobs:
       - name: Checkout del codice
         uses: actions/checkout@v6
 
-      - name: Creazione immagine
-        uses: ./ # Punto alla root del mio repo dove c'è action.yml
+      - name: Using defaults
+        uses: ./ # repo path where to find action.yaml
         with:
           resolution: '800x600'
-          script: 'tests/logo.scad'   # Path relativo alla root del repo
-          picture: 'tests/logo.png'    # Sarà salvato qui
+          script:     'tests/logo.scad' # root relative path to OpenSCAD script
+          picture:    'tests/logo.png'  # root relative path to the produced image
           projection: 'ortho'
 
-      - name: Verifica e Archiviazione
-        if: success()
-        uses: actions/upload-artifact@v7
+      - name: Overriden inputs
+        uses: ./
         with:
-          name: openscad-result
-          path: tests/logo.png
+          resolution: '1024x768'
+          script:     'tests/logo.scad'
+          picture:    'tests/logo.png'
+          projection: 'ortho'
