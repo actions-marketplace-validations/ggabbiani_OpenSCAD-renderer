@@ -11,6 +11,7 @@ HiRes rendering of OpenSCAD scripts.
 | camera    | false     | -             | OpenSCAD camera position (see [^1])
 | picture   | false     | [^2]          | Target picture name (e.g. pictures/pic_1.png)
 | projection| false     | 'perspective' | 'ortho' or 'perspective'
+| render    | false     | false         | full OpenSCAD geometry evaluation when exporting png
 | resolution| false     | 800x600       | Target image resolution in 'openscad' format (e.g. 1024x768)
 | script    | true      | -             | OpenSCAD script
 
@@ -35,8 +36,8 @@ The resulting picture will be saved as `tests/logo.png` with te default 800x600 
 
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:
-      script:     'tests/logo.scad'
-      picture:    'tests/logo-overridden.png' # picture name override
-      projection: 'ortho'                     # 'otho' projection override
+      script:   'tests/logo.scad'
+      picture:  'tests/logo-overridden.png' # picture name override
+      render:   true                        # render flag override
 
 ![overriden image](images/overriden-logo.png)

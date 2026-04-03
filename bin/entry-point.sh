@@ -19,7 +19,7 @@ trap 'on_exit $? $test' EXIT
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-c|--camera <position>] [-p|--projection <projection>] [-r|--resolution <resolution>] [-i|--image <image path>] SCRIPT
+$(basename $0) [-?|-h|--help] [-c|--camera <position>] [-p|--projection <projection>] [-r|--resolution <resolution>] [-i|--image <image path>] [--render] SCRIPT
 
   -?|-h|--help      this help
   -c|--camera       OpenSCAD camera position
@@ -72,6 +72,10 @@ while (( "$#" )); do
       fi
       shift 2
       ;;
+    --render)
+      RENDER="--render"
+      shift
+      ;;
     -r|--resolution)
       if [ -n "$2" ]; then
         RESIZE="-resize $2"
@@ -120,7 +124,7 @@ PIC_DIR=$(dirname "$PIC_PATH")
 PIC_FILE=$(basename "$PIC_PATH")
 
 
-xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION "$SCRIPT" "$PIC_PATH"
+xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION "$SCRIPT" "$RENDER" "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
 rm "$PIC_DIR/unscaled-$PIC_FILE"
 

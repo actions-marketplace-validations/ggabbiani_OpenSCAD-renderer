@@ -18,6 +18,11 @@ inputs:
     required: false
     default: 'perspective'
 
+  render:
+    description: 'full OpenSCAD geometry evaluation when exporting png'
+    required: false
+    default: false
+
   resolution:
     description: 'Target resolution in ''openscad'' format i.e. 800x600'
     required: false
@@ -39,4 +44,5 @@ runs:
     - ${{ inputs.projection }}
     - --image
     - ${{ inputs.picture }}
+    - ${{ inputs.render && '--render' || '' }}
     - ${{ inputs.script }}

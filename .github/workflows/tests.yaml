@@ -30,7 +30,7 @@ jobs:
         with:
           script:     'tests/logo.scad'
           picture:    'tests/overriden-logo.png'  # picture name override
-          projection: 'ortho'                     # 'otho' projection override
+          render: true                            # render flag override
 
       - name: Verifica e Archiviazione
         if: success()
