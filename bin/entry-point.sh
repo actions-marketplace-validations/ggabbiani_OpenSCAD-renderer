@@ -99,8 +99,14 @@ done
 eval set -- "$POSITIONALS"
 
 if (( $# < 1 )); then
-  fail 2 "Picture name expected"
+  PIC_PATH="${1%.scad}.png"
+else
+  PIC_PATH=$1
 fi
+PIC_DIR=$(dirname "$PIC_PATH")
+PIC_FILE=$(basename "$PIC_PATH")
+shift 1
+
 if [ -z "$RESOLUTION" ]; then
   fail 3 "RESOLUTION expected."
 fi
@@ -108,13 +114,9 @@ if [ -z "$SCRIPT" ]; then
   fail 4 "SCRIPT expected."
 fi
 
-PIC_PATH=$1
 if [ -z "$1" ]; then
   fail 3 "Valid picture name expected"
 fi
-PIC_DIR=$(dirname "$PIC_PATH")
-PIC_FILE=$(basename "$PIC_PATH")
-shift 1
 
 xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION "$SCRIPT" "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"

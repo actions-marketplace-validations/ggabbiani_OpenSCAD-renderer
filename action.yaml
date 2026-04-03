@@ -5,26 +5,27 @@ branding:
   color: 'blue'
 
 inputs:
-  picture:
-    description: 'Target picture name (with extension)'
-    required: true
-
-  resolution:
-    description: 'Target resolution in ''openscad'' format i.e. 800x600'
-    required: true
-
-  script:
-    description: 'OpenSCAD script'
-    required: true
-
   camera:
     description: 'OpenSCAD camera position'
+    required: false
+
+  picture:
+    description: 'Target picture name (with extension)'
     required: false
 
   projection:
     description: '''ortho'' or ''perspective'''
     required: false
     default: 'perspective'
+
+  resolution:
+    description: 'Target resolution in ''openscad'' format i.e. 800x600'
+    required: false
+    default:  '800x600'
+
+  script:
+    description: 'OpenSCAD script'
+    required: true
 
 runs:
   using: 'docker'
