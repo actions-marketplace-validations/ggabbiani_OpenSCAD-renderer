@@ -27,7 +27,7 @@ HiRes rendering of OpenSCAD scripts.
 
 The resulting picture will be saved as `tests/logo.png` with te default 800x600 resolution.
 
-### Overriden imputs
+### Overriden inputs
 
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:

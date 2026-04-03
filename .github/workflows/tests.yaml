@@ -20,6 +20,14 @@ jobs:
           picture: 'tests/logo.png'    # Sarà salvato qui
           projection: 'ortho'
 
+      - name: Sanity Check Rendering
+        run: |
+          GEOMETRY=$(identify -format "%wx%h" tests/logo.png)
+          if [ "$GEOMETRY" != "800x600" ]; then
+            echo "Il rendering ha prodotto dimensioni errate!"
+            exit 1
+          fi
+
       - name: Verifica e Archiviazione
         if: success()
         uses: actions/upload-artifact@v7
