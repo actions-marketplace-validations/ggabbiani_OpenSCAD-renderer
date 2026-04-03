@@ -29,6 +29,8 @@ HiRes rendering of OpenSCAD scripts.
 
 The resulting picture will be saved as `tests/logo.png` with te default 800x600 resolution.
 
+![default image](images/logo.png)
+
 ### Overriden inputs
 
     uses: ggabbiani/OpenSCAD-renderer@v1
@@ -36,3 +38,5 @@ The resulting picture will be saved as `tests/logo.png` with te default 800x600 
       script:     'tests/logo.scad'
       picture:    'tests/logo-overridden.png' # picture name override
       projection: 'ortho'                     # 'otho' projection override
+
+![overriden image](images/overriden-logo.png)
