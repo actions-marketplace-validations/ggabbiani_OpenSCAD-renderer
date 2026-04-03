@@ -24,7 +24,7 @@ inputs:
   projection:
     description: '''ortho'' or ''perspective'''
     required: false
-    default: 'ortho'
+    default: 'perspective'
 
 runs:
   using: 'docker'
