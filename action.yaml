@@ -37,6 +37,6 @@ runs:
     - ${{ inputs.camera }}
     - --projection
     - ${{ inputs.projection }}
-    - --script
-    - ${{ inputs.script }}
+    - --image
     - ${{ inputs.picture }}
+    - ${{ inputs.script }}

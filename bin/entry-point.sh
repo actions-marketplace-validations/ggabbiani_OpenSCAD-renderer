@@ -19,13 +19,13 @@ trap 'on_exit $? $test' EXIT
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-c|--camera <position>] [-p|--projection <projection>] [-r|--resolution <resolution>] [-s|--script <script name>] PICTURE
+$(basename $0) [-?|-h|--help] [-c|--camera <position>] [-p|--projection <projection>] [-r|--resolution <resolution>] [-i|--image <image path>] SCRIPT
 
   -?|-h|--help      this help
   -c|--camera       OpenSCAD camera position
+  -i|--image        image path
   -p|--projection   'ortho' or 'perspective'
   -r|--resolution   target resolution in 'openscad' format i.e. 800x600
-  -s|--script       OpenSCAD script
 
 EoH
 exit 0
@@ -60,6 +60,12 @@ while (( "$#" )); do
       fi
       shift 2
       ;;
+    -i|--image)
+      if [ -n "$2" ]; then
+        PIC_PATH="$2"
+      fi
+      shift 2
+      ;;
     -p|--projection)
       if [ -n "$2" ]; then
         PROJECTION="--projection=$2"
@@ -70,12 +76,6 @@ while (( "$#" )); do
       if [ -n "$2" ]; then
         RESIZE="-resize $2"
         RESOLUTION="--resolution=$2"
-      fi
-      shift 2
-      ;;
-    -s|--script)
-      if [ -n "$2" ]; then
-        SCRIPT="--ofl-script=$2"
       fi
       shift 2
       ;;
@@ -98,25 +98,27 @@ done
 # set positional arguments in their proper place
 eval set -- "$POSITIONALS"
 
+set -x
+
 if (( $# < 1 )); then
-  PIC_PATH="${1%.scad}.png"
-else
-  PIC_PATH=$1
+  fail 3 "Missing OpenSCAD script"
 fi
-PIC_DIR=$(dirname "$PIC_PATH")
-PIC_FILE=$(basename "$PIC_PATH")
-shift 1
+if [ -z "$1" ]; then
+  fail 4 "Valid OpenSCAD script expected"
+fi
+SCRIPT="--ofl-script=$1"
+shift
 
 if [ -z "$RESOLUTION" ]; then
   fail 3 "RESOLUTION expected."
 fi
-if [ -z "$SCRIPT" ]; then
-  fail 4 "SCRIPT expected."
+if [ -z "$PIC_PATH" ]; then
+  TEMP="${SCRIPT#*=}"
+  PIC_PATH="${TEMP%.scad}.png"
 fi
+PIC_DIR=$(dirname "$PIC_PATH")
+PIC_FILE=$(basename "$PIC_PATH")
 
-if [ -z "$1" ]; then
-  fail 3 "Valid picture name expected"
-fi
 
 xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION "$SCRIPT" "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
