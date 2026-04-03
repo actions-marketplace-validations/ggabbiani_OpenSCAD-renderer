@@ -98,7 +98,7 @@ done
 # set positional arguments in their proper place
 eval set -- "$POSITIONALS"
 
-set -x
+# set -x
 
 if (( $# < 1 )); then
   fail 3 "Missing OpenSCAD script"
