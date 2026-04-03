@@ -1,3 +1,5 @@
+[![Docker build](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/build.yaml/badge.svg)](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/build.yaml)
+[![Regression tests](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/tests.yaml/badge.svg)](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/tests.yaml)
 # OpenSCAD-renderer
 
 HiRes rendering of OpenSCAD scripts.
@@ -31,7 +33,6 @@ The resulting picture will be saved as `tests/logo.png` with te default 800x600 
 
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:
-      resolution: '1024x768'
       script:     'tests/logo.scad'
-      picture:    'tests/logo-overridden.png'
-      projection: 'ortho'
+      picture:    'tests/logo-overridden.png' # picture name override
+      projection: 'ortho'                     # 'otho' projection override
