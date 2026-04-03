@@ -5,6 +5,21 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+name: Regression tests
+on:
+  workflow_run:
+    workflows: ["Docker Build"]
+    types: [completed]
+  push:
+    branches: [ trunk ]
+  workflow_dispatch:      # <--- Scatta se lo lanci a mano
+
+# a new triggered test (i.e. from a 'workflow_run'),
+# cancel the eventually running previous one (i.e. the one triggered from a 'push').
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   render:
     runs-on: ubuntu-latest
