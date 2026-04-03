@@ -124,12 +124,12 @@ xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION "$SCRIPT" "$PIC
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
 rm "$PIC_DIR/unscaled-$PIC_FILE"
 
-echo "Verifica dimensioni finali..."
+echo "Checking resolution..."
 FINAL_GEOMETRY=$(identify -format "%wx%h" "$PIC_PATH")
 if [ "$FINAL_GEOMETRY" != "${RESIZE#-resize }" ]; then
   # Nota: ${RESIZE#-resize } estrae "800x600" dalla variabile $RESIZE
   fail 4 "Errore: Dimensioni attese ${RESIZE#-resize }, ottenute $FINAL_GEOMETRY"
 fi
 
-echo "✅ actual size: $FINAL_GEOMETRY"
+echo "✅ resolution: $FINAL_GEOMETRY"
 exit 0
