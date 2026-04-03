@@ -1,10 +1,3 @@
-name: Live Test OpenSCAD
-on:
-  push:
-    branches: [ trunk ]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 name: Regression tests
 on:
   workflow_run:
@@ -12,7 +5,7 @@ on:
     types: [completed]
   push:
     branches: [ trunk ]
-  workflow_dispatch:      # <--- Scatta se lo lanci a mano
+  workflow_dispatch:      # <--- explicit run
 
 # a new triggered test (i.e. from a 'workflow_run'),
 # cancel the eventually running previous one (i.e. the one triggered from a 'push').
