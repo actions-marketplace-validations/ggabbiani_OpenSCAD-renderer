@@ -47,7 +47,7 @@ DRY="OFF"
 
 set -x
 
-echo "$@"
+echo "PARAMETERS=$@"
 
 ##############################################################################
 # parsing
@@ -107,6 +107,7 @@ done
 # set positional arguments in their proper place
 eval set -- "$POSITIONALS"
 
+echo "POSITIONALS=$@"
 if (( $# < 1 )); then
   fail 3 "Missing OpenSCAD script"
 fi
