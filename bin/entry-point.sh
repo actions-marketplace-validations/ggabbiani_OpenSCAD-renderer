@@ -45,6 +45,8 @@ VERBOSE="1"
 MODE="foundation"
 DRY="OFF"
 
+set -x
+
 ##############################################################################
 # parsing
 POSITIONALS=""
@@ -101,8 +103,6 @@ while (( "$#" )); do
 done
 # set positional arguments in their proper place
 eval set -- "$POSITIONALS"
-
-# set -x
 
 if (( $# < 1 )); then
   fail 3 "Missing OpenSCAD script"
