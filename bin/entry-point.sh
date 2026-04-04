@@ -95,6 +95,7 @@ while (( "$#" )); do
       ;;
     *) # preserve positional arguments
       if [ -n "$1" ]; then
+        echo "inserting '$1'"
         POSITIONALS="$POSITIONALS $1"
       fi
       shift
