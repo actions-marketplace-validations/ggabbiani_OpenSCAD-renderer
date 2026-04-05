@@ -31,6 +31,7 @@ jobs:
           script:     'tests/logo.scad'
           picture:    'tests/overriden-logo.png'  # picture name override
           render: true                            # render flag override
+          camera: '0,0,0,55,0,25,140'
 
       - name: Verifica e Archiviazione
         if: success()
