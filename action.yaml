@@ -46,5 +46,5 @@ runs:
     - ${{ inputs.projection }}
     - --image
     - ${{ inputs.picture }}
-    - ${{ inputs.script }}
     - ${{ inputs.render == 'true' && '--render' }}
+    - ${{ inputs.script }}
