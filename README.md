@@ -37,7 +37,6 @@ The resulting picture will be saved as `tests/logo.png` with te default 800x600 
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:
       script:   'tests/logo.scad'
-      picture:  'tests/logo-overridden.png' # picture name override
-      render:   true                        # render flag override
+      render:   true              # render flag override
 
 ![overriden image](images/overriden-logo.png)
