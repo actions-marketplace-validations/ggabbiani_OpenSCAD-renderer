@@ -16,14 +16,13 @@ on:
 
 jobs:
 
-  fedora:
-    name: Fedora
+  docker-image:
+    name: Fedora base Docker image
     runs-on: ubuntu-latest
 
     env:
       IMAGE_NAME: git-actions:fedora
       DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/git-actions:fedora"
-
 
     steps:
 
@@ -53,6 +52,7 @@ jobs:
         with:
           username: ggabbiani
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       # Docker image push after successful build, documentation make and tests execution
       - name: promote
         if: steps.docker.outputs.changed=='yes'
@@ -61,3 +61,27 @@ jobs:
           docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
           docker push ${DOCKER_IMAGE}
 
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v6
+
+      - name: Default inputs test
+        uses: ./ # repo path where to find action.yaml
+        with:
+          script:     'tests/logo.scad'         # root relative path to OpenSCAD script
+
+      - name: Overriden inputs test
+        uses: ./
+        with:
+          script:   'tests/logo.scad'
+          picture:  'tests/overriden-logo.png'  # picture name override
+          render:   true                        # render flag override
+          camera:   '0,0,0,55,0,25,140'
+
+      - name: Verifica e Archiviazione
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          path: tests/*.png
