@@ -8,10 +8,12 @@ inputs:
   camera:
     description: 'OpenSCAD camera position'
     required: false
+    default: ''
 
   picture:
     description: 'Target picture name (with extension)'
     required: false
+    default: ''
 
   projection:
     description: '''ortho'' or ''perspective'''
