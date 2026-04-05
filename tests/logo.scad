@@ -11,8 +11,7 @@ module Logo(size=50, $fn=100) {
 
     // One positive object (sphere) and three negative objects (cylinders)
     difference() {
-        // sphere(d=size);
-        cube(size,center=true);
+        sphere(d=size);
 
         cylinder(d=hole, h=cylinderHeight, center=true);
         // The '#' operator highlights the object
