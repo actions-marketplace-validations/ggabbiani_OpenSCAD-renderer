@@ -1,5 +1,4 @@
 [![Docker build](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/build.yaml/badge.svg)](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/build.yaml)
-[![Regression tests](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/tests.yaml/badge.svg)](https://github.com/ggabbiani/OpenSCAD-renderer/actions/workflows/tests.yaml)
 # OpenSCAD-renderer
 
 HiRes rendering of OpenSCAD scripts.
