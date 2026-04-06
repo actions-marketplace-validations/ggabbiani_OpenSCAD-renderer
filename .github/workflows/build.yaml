@@ -20,11 +20,6 @@ jobs:
   base-image:
     name: Static pre-requisites
     runs-on: ubuntu-latest
-    # Gira se: è un tag OPPURE se è un push su trunk che NON ha un tag associato
-    # (Evita la doppia esecuzione se pushi commit e tag insieme)
-    if: >
-      github.ref_type == 'tag' ||
-      (github.ref_type == 'branch' && github.event.base_ref == null)
 
     env:
       IMAGE_NAME: base
@@ -63,11 +58,6 @@ jobs:
     name: Renderer Docker image
     needs: [base-image]
     runs-on: ubuntu-latest
-    # Gira se: è un tag OPPURE se è un push su trunk che NON ha un tag associato
-    # (Evita la doppia esecuzione se pushi commit e tag insieme)
-    if: >
-      github.ref_type == 'tag' ||
-      (github.ref_type == 'branch' && github.event.base_ref == null)
 
     env:
       IMAGE_NAME: git-actions:fedora
@@ -111,11 +101,6 @@ jobs:
     name: Regression tests
     needs: [docker-image]
     runs-on: ubuntu-latest
-    # Gira se: è un tag OPPURE se è un push su trunk che NON ha un tag associato
-    # (Evita la doppia esecuzione se pushi commit e tag insieme)
-    if: >
-      github.ref_type == 'tag' ||
-      (github.ref_type == 'branch' && github.event.base_ref == null)
 
     steps:
       - name: Code checkout
@@ -140,16 +125,8 @@ jobs:
         with:
           path: tests/*.png
 
-  draft-release:
-    name: Draft release
+  call-release:
     needs: [tests]
-    runs-on: ubuntu-latest
-    if: github.ref_type == 'tag'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
+    # Questa è la condizione chiave: gira solo se l'evento corrente è un TAG
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: ./.github/workflows/draft-release.yml@trunk # Punta al file di release
