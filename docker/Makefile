@@ -36,7 +36,7 @@ clean: ## Clean all local Docker images
 	&& $(BUILD_CMD) -t $(IMAGE):$(DISTRO) .
 	$(call target-epilogue-success)
 
-.buildx:  ## Cached build through buildx and GHA cache(used by gitops ONLY)
+.buildx:  ## Cached build through buildx and GHA cache (used by gitops ONLY)
 	$(call target-prologue)
 	cd $(DISTRO) && ( [ -d app ] || mkdir app ) && cp -a \
 		$(BIN)/entry-point.sh \
