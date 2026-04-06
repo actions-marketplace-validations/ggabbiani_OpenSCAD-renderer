@@ -20,6 +20,11 @@ jobs:
   base-image:
     name: Static pre-requisites
     runs-on: ubuntu-latest
+    # Gira se: è un tag OPPURE se è un push su trunk che NON ha un tag associato
+    # (Evita la doppia esecuzione se pushi commit e tag insieme)
+    if: >
+      github.ref_type == 'tag' ||
+      (github.ref_type == 'branch' && github.event.base_ref == null)
 
     env:
       IMAGE_NAME: base
@@ -58,6 +63,11 @@ jobs:
     name: Renderer Docker image
     needs: [base-image]
     runs-on: ubuntu-latest
+    # Gira se: è un tag OPPURE se è un push su trunk che NON ha un tag associato
+    # (Evita la doppia esecuzione se pushi commit e tag insieme)
+    if: >
+      github.ref_type == 'tag' ||
+      (github.ref_type == 'branch' && github.event.base_ref == null)
 
     env:
       IMAGE_NAME: git-actions:fedora
@@ -101,6 +111,12 @@ jobs:
     name: Regression tests
     needs: [docker-image]
     runs-on: ubuntu-latest
+    # Gira se: è un tag OPPURE se è un push su trunk che NON ha un tag associato
+    # (Evita la doppia esecuzione se pushi commit e tag insieme)
+    if: >
+      github.ref_type == 'tag' ||
+      (github.ref_type == 'branch' && github.event.base_ref == null)
+
     steps:
       - name: Code checkout
         uses: actions/checkout@v6
@@ -128,11 +144,12 @@ jobs:
     name: Draft release
     needs: [tests]
     runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
         with:
           draft: true
