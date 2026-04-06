@@ -54,7 +54,7 @@ jobs:
           make docker/.base BASE_IMG="${{ env.DOCKER_IMAGE }}"
 
   docker-image:
-    name: Rendere Docker image
+    name: Renderer Docker image
     needs: [base-image]
     runs-on: ubuntu-latest
 
