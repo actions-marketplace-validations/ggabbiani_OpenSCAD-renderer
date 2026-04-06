@@ -16,13 +16,50 @@ on:
 
 jobs:
 
+  base-image:
+    name: Static pre-requisites
+
+    env:
+      IMAGE_NAME: base
+      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/renderer-base:v1.0.0"
+
+    steps:
+
+      # Checks-out repo on $GITHUB_WORKSPACE
+      - name: Project checkout
+        uses: actions/checkout@v6
+        with:
+          # Number of commits to fetch. 0 indicates all history for all branches and tags (default 1).
+          fetch-depth: '0'
+
+      # Check if anything in docker/base/* changed with the last commit.
+      - name: Docker base changes
+        id: base
+        run: |
+          set +e
+          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/base/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+
+      - name: Docker Hub Login
+        if: steps.base.outputs.changed == 'yes'
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Base build and push
+        if: steps.base.outputs.changed == 'yes'
+        run: |
+          make docker/.base BASE_IMG="${{ DOCKER_IMAGE }}"
+
   docker-image:
-    name: Fedora base Docker image
+    name: Rendere Docker image
+    needs: [base-image]
     runs-on: ubuntu-latest
 
     env:
       IMAGE_NAME: git-actions:fedora
-      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/git-actions:fedora"
+      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/renderer:v1.0.0"
 
     steps:
 
@@ -43,12 +80,8 @@ jobs:
         id: docker
         run: |
           set +e
-          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/' -e '^bin/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/renderer/' -e '^bin/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
-
-      - name: Set up Docker Buildx
-        if: steps.docker.outputs.changed == 'yes'
-        uses: docker/setup-buildx-action@v3
 
       - name: Docker Hub Login
         if: steps.docker.outputs.changed == 'yes'
@@ -60,12 +93,7 @@ jobs:
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          # Il Makefile ora può usare le funzionalità di buildx configurate sopra
-          make DISTRO=fedora docker/.buildx
-
-          # Tag e Push (come facevi prima)
-          docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
-          docker push ${DOCKER_IMAGE}
+          make RENDERER_IMG=${{ DOCKER_IMAGE }}
 
   tests:
     name: Regression tests

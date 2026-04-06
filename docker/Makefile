@@ -19,22 +19,33 @@ BUILDX_CMD	= docker buildx build
 
 all: fedora	## Build images in all the target platforms
 
-clean: ## Clean all local Docker images
-	$(call aggregate-prologue)
-	$(REMOVE_CMD) $(IMAGE):fedora || true
-	docker image prune --build-cache -f
-	$(call aggregate-epilogue)
-
-.build:
+.base:
 	$(call target-prologue)
-	cd $(DISTRO) && ( [ -d app ] || mkdir app ) && cp -a \
+	$(if $(BASE_IMG), , $(error BASE_IMG undefined.))
+	cd base && docker build -t base .
+	docker tag base $(BASE_IMG)
+	docker push $(BASE_IMG)
+	$(call target-epilogue-success)
+
+.renderer:
+	$(call target-prologue)
+	$(if $(RENDERER_IMG), , $(error BASE_IMG undefined.))
+	cd renderer && ( [ -d app ] || mkdir app ) && cp -a \
 		$(BIN)/entry-point.sh \
 		$(BIN)/functions.sh \
 		$(BIN)/make-picture.py \
 		$(BIN)/ofl.py \
 		app/ \
-	&& $(BUILD_CMD) -t $(IMAGE):$(DISTRO) .
+	&& docker build -t renderer .
+	docker tag renderer $(RENDERER_IMG)
+	docker push $(RENDERER_IMG)
 	$(call target-epilogue-success)
+
+clean: ## Clean all local Docker images
+	$(call aggregate-prologue)
+	$(REMOVE_CMD) $(IMAGE):fedora || true
+	docker image prune --build-cache -f
+	$(call aggregate-epilogue)
 
 .buildx:  ## Cached build through buildx and GHA cache (used by gitops ONLY)
 	$(call target-prologue)
@@ -52,8 +63,8 @@ clean: ## Clean all local Docker images
 		-t $(IMAGE):$(DISTRO) .
 	$(call target-epilogue-success)
 
-fedora: DISTRO=fedora
-fedora: .build	## Builds a Fedora based image
+renderer: RENDERER_IMG=ggabbiani/renderer:v1.0.0
+renderer: .renderer	## Builds a Fedora based image
 
 help: ## Shows this help
 	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
