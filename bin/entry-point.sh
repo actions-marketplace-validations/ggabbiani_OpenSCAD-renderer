@@ -87,6 +87,12 @@ while (( "$#" )); do
       fi
       shift 2
       ;;
+    --view-axes)
+      if [ "$2" -eq "true" ]; then
+        VIEW_AXES="--view=axes"
+      fi
+      shift 2
+      ;;
     --) # end argument parsing
       shift
       EXTRAS="$@"
@@ -129,7 +135,7 @@ PIC_FILE=$(basename "$PIC_PATH")
 
 echo "RENDER=$RENDER"
 
-xvfb-run -d $APP/make-picture.py -v 4 $RESOLUTION $CAMERA $PROJECTION "$SCRIPT" $RENDER "$PIC_PATH"
+xvfb-run -d $APP/make-picture.py -v 4 $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$SCRIPT" $RENDER "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
 rm "$PIC_DIR/unscaled-$PIC_FILE"
 

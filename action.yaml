@@ -34,6 +34,11 @@ inputs:
     description: 'OpenSCAD script'
     required: true
 
+  view-axes:
+    description:  'View axes'
+    required: false
+    default:  true
+
 runs:
   using: 'docker'
   image: 'docker://ggabbiani/git-actions:fedora'
@@ -46,5 +51,7 @@ runs:
     - ${{ inputs.projection }}
     - --image
     - ${{ inputs.picture }}
+    - --view-axes
+    - ${{ inputs.view-axes }}
     - ${{ inputs.render == 'true' && '--render' || '' }}
     - ${{ inputs.script }}
