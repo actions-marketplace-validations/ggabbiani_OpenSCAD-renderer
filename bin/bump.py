@@ -144,30 +144,27 @@ try:
     f'''
     this script is going to:
 
-    * update and commit:
-        - {core_file} ({bumped.major}.{bumped.minor}.{bumped.patch});
-        - Documentation
     * annotate local repo as {bumped.tag()};
     * push updates and {bumped.tag()} annotation to remote repo
     '''
     )
 
     if ofl.confirm("press 'y' to continue or 'n' to exit"):
-        cmd_doc     = ['make', '-s', 'docs/all']
-        cmd_commit  = ['git', 'commit', '-m', f'Version {str(bumped)} bumped', '-a']
+        # cmd_doc     = ['make', '-s', 'docs/all']
+        # cmd_commit  = ['git', 'commit', '-m', f'Version {str(bumped)} bumped', '-a']
         cmd_tag     = ['git', 'tag', '-m', f'Version {str(bumped)} bumped', bumped.tag(), branch]
         cmd_push    = ['git', 'push', '--follow-tags']
         if CLI.dry_run:
-            print(cmd_doc)
-            print(cmd_commit)
+            # print(cmd_doc)
+            # print(cmd_commit)
             print(cmd_tag)
             print(cmd_push)
         else:
-            subprocess.run(['/bin/false'], check=True)
-#        lib_update(bumped)
-#        subprocess.run(cmd_doc, check=True)
-#        subprocess.run(cmd_tag, check=True)
-#        subprocess.run(cmd_push, check=True)
+            # subprocess.run(['/bin/false'], check=True)
+            # lib_update(bumped)
+            # subprocess.run(cmd_doc, check=True)
+            subprocess.run(cmd_tag, check=True)
+            subprocess.run(cmd_push, check=True)
 
 except RuntimeError as error:
     ofl.error('***ERROR***:')
