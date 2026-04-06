@@ -45,6 +45,7 @@ clean: ## Clean all local Docker images
 		$(BIN)/ofl.py \
 		app/ \
 	&& $(BUILDX_CMD) \
+		--progress=plain \
 		--cache-from=type=gha \
 		--cache-to=type=gha,mode=max \
 		--load \
