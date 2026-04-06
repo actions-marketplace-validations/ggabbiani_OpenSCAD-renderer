@@ -41,7 +41,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ggabbiani/git-actions:fedora'
+  image: 'docker://ggabbiani/renderer:v1.0.0'
   args:
     - --resolution
     - ${{ inputs.resolution }}
