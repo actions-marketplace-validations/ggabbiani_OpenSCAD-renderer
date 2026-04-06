@@ -18,6 +18,7 @@ jobs:
 
   base-image:
     name: Static pre-requisites
+    runs-on: ubuntu-latest
 
     env:
       IMAGE_NAME: base
@@ -50,7 +51,7 @@ jobs:
       - name: Base build and push
         if: steps.base.outputs.changed == 'yes'
         run: |
-          make docker/.base BASE_IMG="${{ DOCKER_IMAGE }}"
+          make docker/.base BASE_IMG="${{ env.DOCKER_IMAGE }}"
 
   docker-image:
     name: Rendere Docker image
@@ -87,13 +88,13 @@ jobs:
         if: steps.docker.outputs.changed == 'yes'
         uses: docker/login-action@v4
         with:
-          username: ggabbiani
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          make RENDERER_IMG=${{ DOCKER_IMAGE }}
+          make RENDERER_IMG=${{ env.DOCKER_IMAGE }}
 
   tests:
     name: Regression tests
