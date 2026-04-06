@@ -13,6 +13,7 @@ HiRes rendering of OpenSCAD scripts.
 | render    | false     | false         | full OpenSCAD geometry evaluation when exporting png
 | resolution| false     | 800x600       | Target image resolution in 'openscad' format (e.g. 1024x768)
 | script    | true      | -             | OpenSCAD script
+| view-axes | false     | true          | View axes
 
 [^1]: OpenSCAD camera settings in the format `tx,ty,tz,rx,ry,rz,d`
   with `tx,ty,tz` for translations, `rx,ry,rz` for rotations and `d` for the distance
