@@ -13,7 +13,7 @@ REMOVE_CMD	= $(shell file $$(which docker) | (grep ELF >&/dev/null && echo 'dock
 # UNUSED
 RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shell tty)),-it) --rm
 BUILD_CMD	= docker build
-BUILDX_CMD	= docker buildx
+BUILDX_CMD	= docker buildx build
 
 .DEFAULT_GOAL := help
 
@@ -47,7 +47,7 @@ clean: ## Clean all local Docker images
 	&& $(BUILDX_CMD) \
 		--cache-from=type=gha \
 		--cache-to=type=gha,mode=max \
-		--load
+		--load \
 		-t $(IMAGE):$(DISTRO) .
 	$(call target-epilogue-success)
 
