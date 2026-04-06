@@ -46,18 +46,24 @@ jobs:
           (git diff --name-only HEAD HEAD~1 | grep -e '^docker/fedora/' -e '^bin/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
+      - name: Set up Docker Buildx
+        if: steps.docker.outputs.changed == 'yes'
+        uses: docker/setup-buildx-action@v3
+
       - name: Docker Hub Login
-        if: steps.docker.outputs.changed=='yes'
+        if: steps.docker.outputs.changed == 'yes'
         uses: docker/login-action@v4
         with:
           username: ggabbiani
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Docker image push after successful build, documentation make and tests execution
-      - name: promote
-        if: steps.docker.outputs.changed=='yes'
+      - name: Build and Push via Makefile
+        if: steps.docker.outputs.changed == 'yes'
         run: |
-          make docker/fedora
+          # Il Makefile ora può usare le funzionalità di buildx configurate sopra
+          make DISTRO=fedora docker/.buildx
+
+          # Tag e Push (come facevi prima)
           docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
           docker push ${DOCKER_IMAGE}
 
