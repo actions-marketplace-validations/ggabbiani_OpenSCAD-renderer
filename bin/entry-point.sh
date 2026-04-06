@@ -88,7 +88,7 @@ while (( "$#" )); do
       shift 2
       ;;
     --view-axes)
-      if [ "$2" -eq "true" ]; then
+      if [ "$2" = "true" ]; then
         VIEW_AXES="--view=axes"
       fi
       shift 2
