@@ -129,4 +129,4 @@ jobs:
     needs: [tests]
     # Questa è la condizione chiave: gira solo se l'evento corrente è un TAG
     if: startsWith(github.ref, 'refs/tags/')
-    uses: ./.github/workflows/draft-release.yml # Punta al file di release
+    uses: ./.github/workflows/draft-release.yaml # Punta al file di release
