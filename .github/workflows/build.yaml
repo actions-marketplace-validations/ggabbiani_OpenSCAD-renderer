@@ -147,11 +147,11 @@ jobs:
           picture:  'tests/pset-2.png'  # picture name override
 
       - name: Commit and Push changes
+        if: github.ref_type == 'branch'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "docs: update test results [skip ci]"
           file_pattern: 'tests/pset-*.png'
-          branch: trunk
 
   call-release:
     name: Draft release
