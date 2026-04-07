@@ -125,8 +125,32 @@ jobs:
         with:
           path: tests/*.png
 
+  parameter-sets:
+    name: Parameter sets
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Parameter set 1
+        uses: ./
+        with:
+          script:   'tests/cust-parms.scad'
+          picture:  'tests/pset-1.png'  # picture name override
+
+      - name: Parameter set 2
+        uses: ./
+        with:
+          script:   'tests/cust-parms.scad'
+          picture:  'tests/pset-2.png'  # picture name override
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: update test results [skip ci]"
+          file_pattern: 'tests/pset-*.png'
+
   call-release:
-    needs: [tests]
+    needs: [tests,parameter-sets]
     # Questa è la condizione chiave: gira solo se l'evento corrente è un TAG
     if: startsWith(github.ref, 'refs/tags/')
     uses: ./.github/workflows/draft-release.yaml # Punta al file di release

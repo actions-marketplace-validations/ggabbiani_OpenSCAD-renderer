@@ -1,0 +1,11 @@
+{
+    "parameterSets": {
+        "pset-1": {
+            "TEXT": "Parameter set #1"
+        },
+        "pset-2": {
+            "TEXT": "Parameter set #2"
+        }
+    },
+    "fileFormatVersion": "1"
+}
