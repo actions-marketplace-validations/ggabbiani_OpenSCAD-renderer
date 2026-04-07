@@ -123,7 +123,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          path: tests/*.png
+          path: tests/*logo.png
 
   parameter-sets:
     name: Parameter sets
@@ -146,12 +146,18 @@ jobs:
           script:   'tests/cust-parms.scad'
           picture:  'tests/pset-2.png'  # picture name override
 
-      - name: Commit and Push changes
-        if: github.ref_type == 'branch'
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Verifica e Archiviazione
+        if: success()
+        uses: actions/upload-artifact@v7
         with:
-          commit_message: "docs: update test results [skip ci]"
-          file_pattern: 'tests/pset-*.png'
+          path: tests/pset-*.png
+
+      # - name: Commit and Push changes
+      #   if: github.ref_type == 'branch'
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     commit_message: "docs: update test results [skip ci]"
+      #     file_pattern: 'tests/pset-*.png'
 
   call-release:
     name: Draft release
