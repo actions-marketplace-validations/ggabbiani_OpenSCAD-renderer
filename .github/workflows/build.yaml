@@ -124,6 +124,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: tests/*logo.png
+          name: regression-tests
 
   parameter-sets:
     name: Parameter sets
