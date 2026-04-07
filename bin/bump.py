@@ -78,9 +78,6 @@ def git_chk():
     out = subprocess.run(['git', 'status', '--porcelain'], check=True, capture_output=True, text=True)
     if out.stdout.count('\n')>0:
         raise RuntimeError(f'Unclear git status:\n\n{out.stdout}')
-    out = subprocess.run(['git', 'status', '-uno'], capture_output=True, text=True)
-    if out.stdout.count('\n')>0:
-        raise RuntimeError(f'Unclear git status:\n\n{out.stdout}')
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Bump version on remote git origin.')
