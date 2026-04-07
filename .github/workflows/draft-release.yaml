@@ -1,7 +1,11 @@
 name: Draft Release
 
 on:
-  workflow_call: # Permette di essere chiamato da altri workflow
+  push:
+    tags: [ "v*.*.*" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   release:

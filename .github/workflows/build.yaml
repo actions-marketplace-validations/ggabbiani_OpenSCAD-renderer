@@ -7,7 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the trunk branch
   push:
     branches: [ trunk ]
-    tags: [ "v*.*.*" ]
 
   pull_request:
     branches: [ trunk ]
@@ -153,17 +152,3 @@ jobs:
         with:
           path: tests/pset-*.png
           name: parameter-sets
-
-      # - name: Commit and Push changes
-      #   if: github.ref_type == 'branch'
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     commit_message: "docs: update test results [skip ci]"
-      #     file_pattern: 'tests/pset-*.png'
-
-  call-release:
-    name: Draft release
-    needs: [tests,parameter-sets]
-    # Questa è la condizione chiave: gira solo se l'evento corrente è un TAG
-    if: startsWith(github.ref, 'refs/tags/')
-    uses: ./.github/workflows/draft-release.yaml # Punta al file di release
