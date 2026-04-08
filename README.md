@@ -22,6 +22,12 @@ HiRes rendering of OpenSCAD scripts.
 
 [^2]: the default is formed by the OpenSCAD script name with suffix replaced by `.png`.
 
+### Parameter file names and Parameter sets
+
+When the tool is executed, a check is made for the existance of a JSON parameter file whose  name is «script full path suffixed with .json». If found, it will be scanned for a Parameter set name equal to the «picture base name».
+
+In other words the **scrip name** determines the **JSON Parameter file**, while the **target picture name** sets the **Parameter set name**.
+
 ## Usage examples
 
 ### Using defaults
@@ -29,6 +35,10 @@ HiRes rendering of OpenSCAD scripts.
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:
       script: 'tests/logo.scad' # Path relative to the git repo root
+      # «parameter file» defaulted to 'tests/logo.json'
+      # «picture» defaulted to 'tests/logo.png'
+      # «parameter set» to 'logo'
+      # «resolution» defaulted to 800x600
 
 The resulting picture will be saved as `tests/logo.png` with te default 800x600 resolution.
 
@@ -38,7 +48,8 @@ The resulting picture will be saved as `tests/logo.png` with te default 800x600 
 
     uses: ggabbiani/OpenSCAD-renderer@v1
     with:
-      script:   'tests/logo.scad'
-      render:   true              # render flag override
+      script:   'tests/logo.scad' # «parameter file» defaulted to 'tests/logo.json'
+      picture:  'images/fig-1.png'# «parameter set» to 'fig-1'
+      render:   true              # render flag modifies the rendering
 
 ![overriden image](images/overriden-logo.png)
