@@ -1,0 +1,29 @@
+name: Promote Release Tag
+
+on:
+  release:
+    types: [published] # Scatta SOLO quando premi "Publish" sulla Draft
+
+jobs:
+  update-major-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Update Floating Major Tag
+        run: |
+          # Il tag della release pubblicata (es. v1.0.2)
+          TAG_VERSION=${{ github.event.release.tag_name }}
+          # Estrae la major (es. v1)
+          MAJOR_VERSION=${TAG_VERSION%%.*}
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          echo "Promoting $MAJOR_VERSION to point to $TAG_VERSION"
+
+          git tag -fa $MAJOR_VERSION -m "Update $MAJOR_VERSION to $TAG_VERSION"
+          git push origin $MAJOR_VERSION --force
