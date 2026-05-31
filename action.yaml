@@ -10,6 +10,11 @@ inputs:
     required: false
     default: ''
 
+  openscad-path:
+    description: 'The OPENSCADPATH for custom user libraries'
+    required: false
+    default: ''
+
   picture:
     description: 'Target picture name (with extension)'
     required: false
@@ -42,6 +47,9 @@ inputs:
 runs:
   using: 'docker'
   image: 'docker://ggabbiani/renderer:v1.0.0'
+  # Passiamo OPENSCADPATH come vera variabile d'ambiente del container
+  env:
+    OPENSCADPATH: ${{ inputs.openscad-path }}
   args:
     - --resolution
     - ${{ inputs.resolution }}
