@@ -14,7 +14,7 @@ export SHELL				:= /bin/bash
 export COMMA				:= ,
 
 include $(FUNCTIONS)
-# MAKEFLAGS += -s
+MAKEFLAGS += -s
 
 .DEFAULT_GOAL := help
 

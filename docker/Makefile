@@ -15,8 +15,8 @@ RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shel
 BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
-RNDR_IMG	:= ggabbiani/renderer
-RNDR_VER	:= v1.2.0
+RNDR_IMG	= ggabbiani/renderer
+RNDR_VER	= v1.2.0
 
 
 .DEFAULT_GOAL := help
