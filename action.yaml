@@ -51,7 +51,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ggabbiani/renderer:v1.0.0'
+  image: 'docker://ggabbiani/renderer:latest'
   # Passiamo OPENSCADPATH come vera variabile d'ambiente del container
   env:
     OPENSCADPATH: ${{ inputs.openscad-path }}

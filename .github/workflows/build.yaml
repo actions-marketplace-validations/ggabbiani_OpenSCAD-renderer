@@ -58,10 +58,6 @@ jobs:
     needs: [base-image]
     runs-on: ubuntu-latest
 
-    env:
-      IMAGE_NAME: git-actions:fedora
-      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/renderer:v1.1.0"
-
     steps:
 
       # Checks-out repo on $GITHUB_WORKSPACE
@@ -94,7 +90,7 @@ jobs:
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          make docker/.renderer RENDERER_IMG=${{ env.DOCKER_IMAGE }}
+          make renderer
 
   tests:
     name: Regression tests
