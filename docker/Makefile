@@ -15,8 +15,7 @@ RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shel
 BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
-RNDR_VERSION:= ggabbiani/renderer:v1.2.0
-RNDR_LATEST	:= $(patsubst %:%,%:latest,$(RNDR_VERSION))
+RENDERER_IMG	= ggabbiani/renderer:v1.2.0
 
 .DEFAULT_GOAL := help
 .PHONY: renderer
@@ -39,10 +38,10 @@ renderer:
 		$(BIN)/make-picture.py \
 		$(BIN)/ofl.py \
 		app/ \
-	&& docker build -t $(RNDR_VERSION) . && echo "Built $(RNDR_VERSION)"
-	docker tag $(RNDR_VERSION) $(RNDR_LATEST) && echo "Built $(RNDR_LATEST)"
-	docker push $(RNDR_VERSION) && echo "Pushed $(RNDR_VERSION)"
-	docker push $(RNDR_LATEST) && echo "Pushed $(RNDR_LATEST)"
+	&& docker build -t $(RENDERER_IMG) .
+	docker tag $(RENDERER_IMG) $$(echo "$(RENDERER_IMG)" | sed 's/:.*/:latest/')
+	docker push $(RENDERER_IMG)
+	docker push $$(echo "$(RENDERER_IMG)" | sed 's/:.*/:latest/')
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
