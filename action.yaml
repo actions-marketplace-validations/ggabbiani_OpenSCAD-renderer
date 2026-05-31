@@ -11,7 +11,7 @@ inputs:
     default: ''
 
   color-scheme:
-    description: 'OpenSCAD color scheme: Cornfield | Metallic | Sunset | Starnight | BeforeDawn | Nature | DeepOcean | Solarized | Tomorrow | Tomorrow Night | Monotone'
+    description: 'OpenSCAD color scheme: Cornfield, Metallic, Sunset, Starnight, BeforeDawn, Nature, DeepOcean, Solarized, Tomorrow, Tomorrow Night, Monotone'
     required: false
     default: 'Cornfield'
 
