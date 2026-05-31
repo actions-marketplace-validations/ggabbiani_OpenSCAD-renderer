@@ -37,9 +37,9 @@ all: fedora	## Build images in all the target platforms
 		$(BIN)/ofl.py \
 		app/ \
 	&& docker build -t $(RENDERER_IMG) . && echo "Built $(RENDERER_IMG)"
-	docker tag $(RENDERER_IMG) $(RENDERER_LATEST_IMG) && echo "Built $(RENDERER_LATEST_IMG)"
+	docker tag $(RENDERER_IMG) $(patsubst :%,:latest,$(RENDERER_IMG)) && echo "Built $(patsubst :%,:latest,$(RENDERER_IMG))"
 	docker push $(RENDERER_IMG) && echo "Pushed $(RENDERER_IMG)"
-	docker push $(RENDERER_LATEST_IMG) && echo "Pushed $(RENDERER_LATEST_IMG)"
+	docker push $(patsubst :%,:latest,$(RENDERER_IMG)) && echo "Pushed $(patsubst :%,:latest,$(RENDERER_IMG))"
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
@@ -65,7 +65,6 @@ clean: ## Clean all local Docker images
 	$(call target-epilogue-success)
 
 renderer: RENDERER_IMG=ggabbiani/renderer:v1.2.0
-renderer: RENDERER_LATEST_IMG=$(patsubst :%,:latest,$(RENDERER_IMG))
 renderer: .renderer	## Builds a Fedora based image
 
 help: ## Shows this help
