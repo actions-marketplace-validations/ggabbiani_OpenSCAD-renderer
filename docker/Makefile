@@ -15,8 +15,8 @@ RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shel
 BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
-RNDR_VERSION= ggabbiani/renderer:v1.2.0
-RNDR_LATEST	= $(patsubst %:%,%:latest,$(RNDR_VERSION))
+RNDR_VERSION:= ggabbiani/renderer:v1.2.0
+RNDR_LATEST	:= $(patsubst %:%,%:latest,$(RNDR_VERSION))
 
 .DEFAULT_GOAL := help
 .PHONY: renderer
