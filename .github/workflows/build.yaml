@@ -90,7 +90,7 @@ jobs:
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          make renderer
+          make docker/renderer
 
   tests:
     name: Regression tests
