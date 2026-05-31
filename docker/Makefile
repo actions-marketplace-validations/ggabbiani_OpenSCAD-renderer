@@ -19,6 +19,7 @@ RNDR_VERSION= ggabbiani/renderer:v1.2.0
 RNDR_LATEST	= $(patsubst %:%,%:latest,$(RNDR_VERSION))
 
 .DEFAULT_GOAL := help
+.PHONY: renderer
 
 all: fedora	## Build images in all the target platforms
 
