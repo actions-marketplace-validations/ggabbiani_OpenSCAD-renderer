@@ -36,6 +36,7 @@ def hires(lowres):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--camera", help = "OpenSCAD camera position")
+parser.add_argument("--colorscheme", help = "OpenSCAD color scheme")
 parser.add_argument("-d", "--dry-run", action='store_true', help = "On screen dump only of the generated dot file")
 parser.add_argument("-p", "--projection", help = "(o)rtho or (p)erspective when exporting png")
 parser.add_argument("-t", "--temp-root", type=str, help = "Temporary directory path", choices=["/var/tmp","/tmp"],default="/tmp")
@@ -87,6 +88,8 @@ if os.path.isfile(json):
   parms += ['--p',json,'--P',target_base]
 if args.camera:
   parms += ['--camera', args.camera]
+if args.colorscheme:
+  parms += ['--colorscheme', args.colorscheme]
 if args.projection:
   parms += ['--projection', args.projection]
 if args.render:
