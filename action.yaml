@@ -10,6 +10,11 @@ inputs:
     required: false
     default: ''
 
+  color-scheme:
+    description: 'OpenSCAD color scheme: Cornfield | Metallic | Sunset | Starnight | BeforeDawn | Nature | DeepOcean | Solarized | Tomorrow | Tomorrow Night | Monotone'
+    required: false
+    default: 'Cornfield'
+
   openscad-path:
     description: 'The OPENSCADPATH for custom user libraries'
     required: false
@@ -62,4 +67,6 @@ runs:
     - --view-axes
     - ${{ inputs.view-axes }}
     - ${{ inputs.render == 'true' && '--render' || '' }}
+    - --colorscheme
+    - ${{ inputs.color-scheme }}
     - ${{ inputs.script }}
