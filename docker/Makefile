@@ -36,11 +36,10 @@ all: fedora	## Build images in all the target platforms
 		$(BIN)/make-picture.py \
 		$(BIN)/ofl.py \
 		app/ \
-	&& docker build -t renderer .
-	docker tag renderer $(RENDERER_IMG)
-	docker tag $(RENDERER_IMG) $(RENDERER_LATEST_IMG)
-	docker push $(RENDERER_IMG)
-	docker push $(RENDERER_LATEST_IMG)
+	&& docker build -t $(RENDERER_IMG) . && echo "Built $(RENDERER_IMG)"
+	docker tag $(RENDERER_IMG) $(RENDERER_LATEST_IMG) && echo "Built $(RENDERER_LATEST_IMG)"
+	docker push $(RENDERER_IMG) && echo "Pushed $(RENDERER_IMG)"
+	docker push $(RENDERER_LATEST_IMG) && echo "Pushed $(RENDERER_LATEST_IMG)"
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
