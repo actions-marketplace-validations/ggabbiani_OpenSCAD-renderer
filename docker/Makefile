@@ -15,9 +15,12 @@ RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shel
 BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
-RENDERER_IMG	= ggabbiani/renderer:v1.2.0
+RNDR_IMG	:= ggabbiani/renderer
+RNDR_VER	:= v1.2.0
+
 
 .DEFAULT_GOAL := help
+
 .PHONY: renderer
 
 all: fedora	## Build images in all the target platforms
@@ -38,10 +41,10 @@ renderer:
 		$(BIN)/make-picture.py \
 		$(BIN)/ofl.py \
 		app/ \
-	&& docker build -t $(RENDERER_IMG) .
-	docker tag $(RENDERER_IMG) $$(echo "$(RENDERER_IMG)" | sed 's/:.*/:latest/')
-	docker push $(RENDERER_IMG)
-	docker push $$(echo "$(RENDERER_IMG)" | sed 's/:.*/:latest/')
+	&& docker build -t $(RNDR_IMG):$(RNDR_VER) .
+	docker tag $(RNDR_IMG) $(RNDR_IMG):latest
+	# push all the local tags for the renderer (version and latest)
+	docker push -a $(RNDR_IMG)
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
