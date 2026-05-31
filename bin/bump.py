@@ -86,7 +86,7 @@ def parse_args():
     m_excl = parser.add_mutually_exclusive_group()
     m_excl.add_argument('-M', '--major',  action='store_true', help='auto increment current major release number')
     m_excl.add_argument('-m', '--minor',  action='store_true', help='auto increment current minor release number')
-    m_excl.add_argument('-p', '--patch',  action='store_true', help='auto increment current patch release number (default)', default=True)
+    m_excl.add_argument('-p', '--patch',  action='store_true', help='auto increment current patch release number (default)')
     args = parser.parse_args()
     ofl.verbosity   = args.verbosity
     return args
