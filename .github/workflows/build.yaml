@@ -81,14 +81,14 @@ jobs:
           cat "$GITHUB_OUTPUT"
 
       - name: Docker Hub Login
-        if: steps.docker.outputs.changed == 'yes'
+        # if: steps.docker.outputs.changed == 'yes'
         uses: docker/login-action@v4
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push via Makefile
-        if: steps.docker.outputs.changed == 'yes'
+        # if: steps.docker.outputs.changed == 'yes'
         run: |
           make docker/renderer
 
