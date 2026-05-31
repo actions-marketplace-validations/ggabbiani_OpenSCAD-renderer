@@ -15,6 +15,9 @@ RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shel
 BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
+RNDR_VERSION= ggabbiani/renderer:v1.2.0
+RNDR_LATEST	= $(patsubst %:%,%:latest,$(RNDR_VERSION))
+
 .DEFAULT_GOAL := help
 
 all: fedora	## Build images in all the target platforms
@@ -27,19 +30,18 @@ all: fedora	## Build images in all the target platforms
 	docker push $(BASE_IMG)
 	$(call target-epilogue-success)
 
-.renderer:
+renderer:
 	$(call target-prologue)
-	$(if $(RENDERER_IMG), , $(error RENDERER_IMG undefined.))
 	cd renderer && ( [ -d app ] || mkdir app ) && cp -a \
 		$(BIN)/entry-point.sh \
 		$(BIN)/functions.sh \
 		$(BIN)/make-picture.py \
 		$(BIN)/ofl.py \
 		app/ \
-	&& docker build -t $(RENDERER_IMG) . && echo "Built $(RENDERER_IMG)"
-	docker tag $(RENDERER_IMG) $(RENDERER_LATEST_IMG) && echo "Built $(RENDERER_LATEST_IMG)"
-	docker push $(RENDERER_IMG) && echo "Pushed $(RENDERER_IMG)"
-	docker push $(RENDERER_LATEST_IMG) && echo "Pushed $(RENDERER_LATEST_IMG)"
+	&& docker build -t $(RNDR_VERSION) . && echo "Built $(RNDR_VERSION)"
+	docker tag $(RNDR_VERSION) $(RNDR_LATEST) && echo "Built $(RNDR_LATEST)"
+	docker push $(RNDR_VERSION) && echo "Pushed $(RNDR_VERSION)"
+	docker push $(RNDR_LATEST) && echo "Pushed $(RNDR_LATEST)"
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
@@ -63,10 +65,6 @@ clean: ## Clean all local Docker images
 		--load \
 		-t $(IMAGE):$(DISTRO) .
 	$(call target-epilogue-success)
-
-renderer: RENDERER_IMG=ggabbiani/renderer:v1.2.0
-renderer: RENDERER_LATEST_IMG=$(patsubst %:%,%:latest,$(RENDERER_IMG))
-renderer: .renderer	## Builds a Fedora based image
 
 help: ## Shows this help
 	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
