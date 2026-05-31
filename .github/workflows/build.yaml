@@ -60,7 +60,7 @@ jobs:
 
     env:
       IMAGE_NAME: git-actions:fedora
-      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/renderer:v1.0.0"
+      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/renderer:v1.1.0"
 
     steps:
 
@@ -72,7 +72,7 @@ jobs:
           # and tags (default 1).
           fetch-depth: '0'
 
-      # Check if anything in docker/fedora/* or /bin/* changed with the last commit.
+      # Check if anything in docker/renderer/* or /bin/* changed with the last commit.
       # See also
       # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
       # and
