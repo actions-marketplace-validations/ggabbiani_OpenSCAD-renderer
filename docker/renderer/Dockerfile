@@ -1,3 +1,4 @@
+# TODO: use the latest instead
 FROM ggabbiani/renderer-base:v1.0.0
 
 # Copia del codice della Action
