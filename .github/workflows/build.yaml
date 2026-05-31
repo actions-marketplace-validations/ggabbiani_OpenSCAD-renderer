@@ -94,7 +94,7 @@ jobs:
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          make RENDERER_IMG=${{ env.DOCKER_IMAGE }}
+          make docker/.renderer RENDERER_IMG=${{ env.DOCKER_IMAGE }}
 
   tests:
     name: Regression tests

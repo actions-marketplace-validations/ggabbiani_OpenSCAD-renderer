@@ -63,7 +63,7 @@ clean: ## Clean all local Docker images
 		-t $(IMAGE):$(DISTRO) .
 	$(call target-epilogue-success)
 
-renderer: RENDERER_IMG=ggabbiani/renderer:v1.0.0
+renderer: RENDERER_IMG=ggabbiani/renderer:v1.1.0
 renderer: .renderer	## Builds a Fedora based image
 
 help: ## Shows this help
