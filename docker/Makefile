@@ -42,7 +42,7 @@ renderer:
 		$(BIN)/ofl.py \
 		app/ \
 	&& docker build -t $(RNDR_IMG):$(RNDR_VER) .
-	docker tag $(RNDR_IMG) $(RNDR_IMG):latest
+	docker tag $(RNDR_IMG):$(RNDR_VER) $(RNDR_IMG):latest
 	# push all the local tags for the renderer (version and latest)
 	docker push -a $(RNDR_IMG)
 	$(call target-epilogue-success)
