@@ -24,7 +24,14 @@ class Version:
     def __init__(self,major=None,minor=None,patch=None):
         if major is None and minor is None and patch is None:
             try:
-                tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match="v*.*.*"'], stderr=subprocess.STDOUT, text=True).strip()[1:]
+                # Usiamo shell=True e passiamo la stringa esatta del terminale
+                tag = subprocess.check_output(
+                    'git describe --tags --abbrev=0 --match="v*.*.*"',
+                    stderr=subprocess.STDOUT,
+                    shell=True,
+                    text=True
+                ).strip()[1:]
+                # tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match=v*.*.*'], stderr=subprocess.STDOUT, text=True).strip()[1:]
             except subprocess.CalledProcessError as exc_info:
                 raise RuntimeError(str(exc_info.output))
             regex   = re.compile(r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
@@ -62,7 +69,13 @@ def handler(signum, frame):
 
 def git_version_tag():
     try:
-        git_tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match="v*.*.*"'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+        # git_tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match=\"v*.*.*\"'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+        git_tag = subprocess.check_output(
+            'git describe --tags --abbrev=0 --match="v*.*.*"',
+            stderr=subprocess.STDOUT,
+            shell=True,
+            text=True
+        ).strip()[1:]
     except subprocess.CalledProcessError as exc_info:
         raise RuntimeError(str(exc_info.output))
     return git_tag
