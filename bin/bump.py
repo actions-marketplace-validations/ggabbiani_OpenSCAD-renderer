@@ -62,7 +62,7 @@ def handler(signum, frame):
 
 def git_version_tag():
     try:
-        git_tag = subprocess.check_output(['git', 'describe', '--abbrev=0'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+        git_tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match=v*.*.*'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
     except subprocess.CalledProcessError as exc_info:
         raise RuntimeError(str(exc_info.output))
     return git_tag
