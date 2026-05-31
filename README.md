@@ -10,6 +10,7 @@ HiRes rendering of OpenSCAD scripts.
 | name      | required  | default       | description
 | ---       | ---       | ---           | ---
 | camera    | false     | -             | OpenSCAD camera position (see [^1])
+| openscad-path | false | -             | The OPENSCADPATH for custom user libraries
 | picture   | false     | [^2]          | Target picture name (e.g. pictures/pic_1.png)
 | projection| false     | 'perspective' | 'ortho' or 'perspective'
 | render    | false     | false         | full OpenSCAD geometry evaluation when exporting png
