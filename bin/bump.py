@@ -24,13 +24,13 @@ class Version:
     def __init__(self,major=None,minor=None,patch=None):
         if major is None and minor is None and patch is None:
             try:
-                tag = subprocess.check_output(['git', 'describe', '--abbrev=0'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+                tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match=v*.*.*'], stderr=subprocess.STDOUT, text=True).strip()[1:]
             except subprocess.CalledProcessError as exc_info:
                 raise RuntimeError(str(exc_info.output))
             regex   = re.compile(r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
             match   = regex.match(tag)
             if not match:
-                raise RuntimeError(f"{version} does not match the expected version pattern.")
+                raise RuntimeError(f"{tag} does not match the expected version pattern.")
             self.major  = int(match.group("major"))
             self.minor  = int(match.group("minor"))
             self.patch  = int(match.group("patch"))
