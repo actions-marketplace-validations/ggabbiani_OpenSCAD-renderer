@@ -29,7 +29,7 @@ all: fedora	## Build images in all the target platforms
 
 .renderer:
 	$(call target-prologue)
-	$(if $(RENDERER_IMG), , $(error BASE_IMG undefined.))
+	$(if $(RENDERER_IMG), , $(error RENDERER_IMG undefined.))
 	cd renderer && ( [ -d app ] || mkdir app ) && cp -a \
 		$(BIN)/entry-point.sh \
 		$(BIN)/functions.sh \
@@ -38,7 +38,9 @@ all: fedora	## Build images in all the target platforms
 		app/ \
 	&& docker build -t renderer .
 	docker tag renderer $(RENDERER_IMG)
+	docker tag $(RENDERER_IMG) $(RENDERER_LATEST_IMG)
 	docker push $(RENDERER_IMG)
+	docker push $(RENDERER_LATEST_IMG)
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
@@ -64,6 +66,7 @@ clean: ## Clean all local Docker images
 	$(call target-epilogue-success)
 
 renderer: RENDERER_IMG=ggabbiani/renderer:v1.1.0
+renderer: RENDERER_LATEST_IMG=$(patsubst :%,:latest,$(RENDERER_IMG))
 renderer: .renderer	## Builds a Fedora based image
 
 help: ## Shows this help
