@@ -104,8 +104,12 @@ echo    = os.path.join(args.temp_root,base+'.echo')
 ofl.debug("command : % s" %parms)
 ofl.debug("echo : % s" %echo)
 
-result  = ofl.openscad(scad,parms=parms,echo_f=echo,hw=True,dry_run=args.dry_run)
-if result.returncode!=0:
-  cprint(f'✝ ({result.returncode})','red')
+try:
+  result = ofl.openscad(scad, parms=parms, echo_f=echo, hw=True, dry_run=args.dry_run)
+  # Se arriva qui, il comando è riuscito (rc=0)
+
+except subprocess.CalledProcessError as e:
+  # Se il comando fallisce (rc!=0), Python salta direttamente qui
+  ofl.error(f'✝ openscad failed with RC {e.returncode}')
   cat(echo)
-  exit(result.returncode)
+  exit(e.returncode)
