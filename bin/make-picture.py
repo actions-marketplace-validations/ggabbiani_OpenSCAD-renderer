@@ -35,18 +35,19 @@ def hires(lowres):
   return str(res[0])+','+str(res[1])
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-c", "--camera", help = "OpenSCAD camera position")
-parser.add_argument("--colorscheme", help = "OpenSCAD color scheme")
-parser.add_argument("-d", "--dry-run", action='store_true', help = "On screen dump only of the generated dot file")
+parser.add_argument("-c", "--camera",     help = "OpenSCAD camera position")
+parser.add_argument("--colorscheme",      help = "OpenSCAD color scheme")
+parser.add_argument("-d", "--dry-run",    action='store_true', help = "On screen dump only of the generated dot file")
+parser.add_argument("--nightly",          action=store_false, help="... guess what.")
 parser.add_argument("-p", "--projection", help = "(o)rtho or (p)erspective when exporting png")
-parser.add_argument("-t", "--temp-root", type=str, help = "Temporary directory path", choices=["/var/tmp","/tmp"],default="/tmp")
-parser.add_argument("-v", "--verbosity", type=int, help = "Increase verbosity", choices=[ofl.SILENT,ofl.ERROR,ofl.WARN,ofl.INFO,ofl.DEBUG],default=ofl.ERROR)
-parser.add_argument("--ofl-script", type=str, help="OpenSCAD script",required=True)
-parser.add_argument("-r","--resolution",type=str,help="target resolution in 'openscad' format i.e. 800x600",required=True)
-parser.add_argument("--render", action='store_true', help = "for full geometry evaluation when exporting png")
-parser.add_argument("--viewall", action='store_true', help = "adjust camera to fit object")
-parser.add_argument("--view", choices=['axes', 'crosshairs', 'edges', 'scales', 'wireframe'], help = "view options")
-parser.add_argument("--make-deps", type=str, help = "make dependency file creation")
+parser.add_argument("-t", "--temp-root",  type=str, help = "Temporary directory path", choices=["/var/tmp","/tmp"],default="/tmp")
+parser.add_argument("-v", "--verbosity",  type=int, help = "Increase verbosity", choices=[ofl.SILENT,ofl.ERROR,ofl.WARN,ofl.INFO,ofl.DEBUG],default=ofl.ERROR)
+parser.add_argument("--ofl-script",       type=str, help="OpenSCAD script",required=True)
+parser.add_argument("-r","--resolution",  type=str,help="target resolution in 'openscad' format i.e. 800x600",required=True)
+parser.add_argument("--render",           action='store_true', help = "for full geometry evaluation when exporting png")
+parser.add_argument("--viewall",          action='store_true', help = "adjust camera to fit object")
+parser.add_argument("--view",             choices=['axes', 'crosshairs', 'edges', 'scales', 'wireframe'], help = "view options")
+parser.add_argument("--make-deps",        type=str, help = "make dependency file creation")
 
 parser.add_argument("picture", type=str, help="Full target picture path")
 
@@ -105,7 +106,7 @@ ofl.debug("command : % s" %parms)
 ofl.debug("echo : % s" %echo)
 
 try:
-  result = ofl.openscad(scad, parms=parms, echo_f=echo, hw=True, dry_run=args.dry_run)
+  result = ofl.openscad(scad, parms=parms, echo_f=echo, hw=True, dry_run=args.dry_run, nightly=args.nightly)
   # Se arriva qui, il comando è riuscito (rc=0)
 
 except subprocess.CalledProcessError as e:

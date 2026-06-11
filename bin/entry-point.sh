@@ -77,6 +77,10 @@ while (( "$#" )); do
       fi
       shift 2
       ;;
+    --nightly)
+      NIGHTLY="$1"
+      shift
+      ;;
     -p|--projection)
       if [ -n "$2" ]; then
         PROJECTION="--projection=$2"
@@ -142,7 +146,7 @@ PIC_FILE=$(basename "$PIC_PATH")
 
 echo "RENDER=$RENDER"
 
-xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$COLORSCHEME" "$SCRIPT" $RENDER "$PIC_PATH"
+xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$COLORSCHEME" "$SCRIPT" $RENDER $NIGHTLY "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
 rm "$PIC_DIR/unscaled-$PIC_FILE"
 

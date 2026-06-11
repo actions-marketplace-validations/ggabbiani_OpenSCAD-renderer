@@ -16,24 +16,31 @@ BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
 RNDR_IMG	= ggabbiani/renderer
-RNDR_VER	= v1.2.0
+RNDR_VER	= v1.3.0
+
+BASE_IMG	= ggabbiani/renderer-base
+BASE_VER	= v1.1.0
 
 
 .DEFAULT_GOAL := help
 
-.PHONY: renderer
+.PHONY: base renderer
 
-all: fedora	## Build images in all the target platforms
+all: base renderer	## Build images in all the target platforms
 
-.base:
+base:	## build base image without push
 	$(call target-prologue)
-	$(if $(BASE_IMG), , $(error BASE_IMG undefined.))
-	cd base && docker build -t base .
-	docker tag base $(BASE_IMG)
-	docker push $(BASE_IMG)
+	cd base && docker build -t $(BASE_IMG):$(BASE_VER) .
+	docker tag $(BASE_IMG):$(BASE_VER) $(BASE_IMG):latest
+# 	docker push -a $(BASE_IMG)
 	$(call target-epilogue-success)
 
-renderer:
+.base: base
+	$(call target-prologue)
+	docker push -a $(BASE_IMG)
+	$(call target-epilogue-success)
+
+renderer:	## build renderer image without push
 	$(call target-prologue)
 	cd renderer && ( [ -d app ] || mkdir app ) && cp -a \
 		$(BIN)/entry-point.sh \
@@ -43,6 +50,12 @@ renderer:
 		app/ \
 	&& docker build -t $(RNDR_IMG):$(RNDR_VER) .
 	docker tag $(RNDR_IMG):$(RNDR_VER) $(RNDR_IMG):latest
+	# push all the local tags for the renderer (version and latest)
+# 	docker push -a $(RNDR_IMG)
+	$(call target-epilogue-success)
+
+.renderer: renderer
+	$(call target-prologue)
 	# push all the local tags for the renderer (version and latest)
 	docker push -a $(RNDR_IMG)
 	$(call target-epilogue-success)

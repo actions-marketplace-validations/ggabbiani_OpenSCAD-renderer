@@ -48,10 +48,10 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Base build and push
+      - name: Base build and push via Makefile
         if: steps.base.outputs.changed == 'yes'
         run: |
-          make docker/.base BASE_IMG="${{ env.DOCKER_IMAGE }}"
+          make docker/.base
 
   docker-image:
     name: Renderer Docker image
@@ -90,7 +90,7 @@ jobs:
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          make docker/renderer
+          make docker/.renderer
 
   tests:
     name: Regression tests

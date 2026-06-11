@@ -1,5 +1,5 @@
 # TODO: use the 'latest' tag instead
-FROM ggabbiani/renderer-base:v1.0.0
+FROM ggabbiani/renderer-base:v1.1.0
 
 # Copia del codice della Action
 COPY app/functions.sh app/entry-point.sh app/ofl.py app/make-picture.py .

@@ -15,6 +15,11 @@ inputs:
     required: false
     default: 'Cornfield'
 
+  openscad-nightly:
+    description: 'Nightly version of OpenSCAD'
+    required: false
+    default: false
+
   openscad-path:
     description: 'The OPENSCADPATH for custom user libraries'
     required: false
@@ -62,6 +67,7 @@ runs:
     - ${{ inputs.camera }}
     - --projection
     - ${{ inputs.projection }}
+    - ${{ inputs.nightly == 'true' && '--nightly' || '' }}
     - --image
     - ${{ inputs.picture }}
     - --view-axes
