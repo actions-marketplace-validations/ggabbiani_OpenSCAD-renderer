@@ -46,7 +46,7 @@ VERBOSE="1"
 MODE="foundation"
 DRY="OFF"
 
-# set -x
+set -x
 
 echo "PARAMETERS=$@"
 
@@ -79,6 +79,7 @@ while (( "$#" )); do
       ;;
     --nightly)
       NIGHTLY="$1"
+      info "NIGHTLY=$NIGHTLY"
       shift
       ;;
     -p|--projection)
@@ -146,7 +147,7 @@ PIC_FILE=$(basename "$PIC_PATH")
 
 echo "RENDER=$RENDER"
 
-xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$COLORSCHEME" "$SCRIPT" $RENDER $NIGHTLY "$PIC_PATH"
+xvfb-run -d $APP/make-picture.py -v 4 $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$COLORSCHEME" "$SCRIPT" $RENDER $NIGHTLY "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
 rm "$PIC_DIR/unscaled-$PIC_FILE"
 
