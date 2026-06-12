@@ -168,5 +168,5 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          path: tests/experimental-*.png
+          path: unscaled-experimental.png
           name: parameter-sets
