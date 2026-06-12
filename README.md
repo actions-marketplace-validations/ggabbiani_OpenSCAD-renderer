@@ -11,6 +11,7 @@ HiRes rendering of OpenSCAD scripts.
 | ---       | ---       | ---           | ---
 | camera    | false     | -             | OpenSCAD camera position (see [^1])
 | color-scheme | false  | Cornfield     | One of the OpenSCAD color scheme: Cornfield, Metallic, Sunset, Starnight, BeforeDawn, Nature, DeepOcean, Solarized, Tomorrow, Tomorrow Night, Monotone
+| openscad-nightly | false | -             | if enabled the nightly version of OpenSCAD will be used with all the experimental features enabled
 | openscad-path | false | -             | The OPENSCADPATH for custom user libraries
 | picture   | false     | [^2]          | Target picture name (e.g. pictures/pic_1.png)
 | projection| false     | 'perspective' | 'ortho' or 'perspective'
