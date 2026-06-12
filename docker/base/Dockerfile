@@ -15,7 +15,7 @@ RUN dnf install -y --nodocs \
     gcc \
     gcc-c++ \
     graphviz \
-    libfuse2 \
+    fuse-libs \
     ImageMagick \
     make \
     meson \
