@@ -72,7 +72,7 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=F
     print(cmd)
   else:
     info("Exec          : % s" %cmd)
-    result = subprocess.run(cmd,capture_output=True,text=True,check=True)
+    result = subprocess.run(cmd,capture_output=True,text=True,check=not must_fail)
     debug("result: % s" %result)
     if hw:
       lines = read_lines(echo_f)
