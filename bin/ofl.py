@@ -96,7 +96,3 @@ nightly_cmd = "/opt/OpenSCAD-nightly/OpenSCAD.AppImage --appimage-extract-and-ru
 verbosity = ERROR
 path      = Path(__file__).parent.parent.absolute()
 lib       = path.joinpath('lib')
-
-# if __name__ == "__main__":
-#     import sys
-#     blah blah ...
