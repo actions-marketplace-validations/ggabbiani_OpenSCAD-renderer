@@ -15,7 +15,7 @@ inputs:
     required: false
     default: 'Cornfield'
 
-  openscad-nightly:
+  nightly:
     description: 'Nightly version of OpenSCAD'
     required: false
     default: false
