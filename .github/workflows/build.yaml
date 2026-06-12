@@ -148,3 +148,25 @@ jobs:
         with:
           path: tests/pset-*.png
           name: parameter-sets
+
+  nightly-build:
+    name: Nightly built experimental feature test
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v6
+
+      - name: Experimental features
+        uses: ./
+        with:
+          script:   'tests/experimental.scad'
+          openscad-nightly: true
+
+      - name: Verifica e Archiviazione
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          path: tests/experimental-*.png
+          name: parameter-sets
