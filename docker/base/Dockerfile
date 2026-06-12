@@ -15,7 +15,6 @@ RUN dnf install -y --nodocs \
     gcc \
     gcc-c++ \
     graphviz \
-    fuse-libs \
     ImageMagick \
     make \
     meson \
@@ -30,7 +29,7 @@ RUN mkdir -p /opt/OpenSCAD-nightly && \
     chmod +x /opt/OpenSCAD-nightly/OpenSCAD.AppImage
 
 RUN file /opt/OpenSCAD-nightly/OpenSCAD.AppImage && \
-    /opt/OpenSCAD-nightly/OpenSCAD.AppImage --version || true
+    /opt/OpenSCAD-nightly/OpenSCAD.AppImage --appimage-extract-and-run --version || true
 
 # ambiente di lavoro
 WORKDIR /app
