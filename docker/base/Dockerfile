@@ -8,12 +8,14 @@ RUN dnf install -y --nodocs \
     python3-pip \
     python3-devel \
     bash \
+    file \
     git \
     openssh-clients \
     curl \
     gcc \
     gcc-c++ \
     graphviz \
+    libfuse2 \
     ImageMagick \
     make \
     meson \
