@@ -58,10 +58,11 @@ ofl.verbosity   = args.verbosity
 ofl.info("Camera        : % s" %args.camera)
 ofl.info("Projection    : % s" %args.projection)
 ofl.info("Dry run       : % s" %args.dry_run)
-ofl.info("OSCAD         : % s" %ofl.oscad)
+# ofl.info("OSCAD         : % s" %ofl.oscad)
 ofl.info("Verbosity     : % s" %args.verbosity)
 ofl.info("Resolution    : % s" %args.resolution)
 ofl.info("View          : % s" %args.view)
+ofl.info("Nightly       : % s" %args.nightly)
 
 full    = os.path.normpath(args.ofl_script.removesuffix('.scad'))
 path    = os.path.dirname(full)
@@ -107,7 +108,14 @@ ofl.debug("echo : % s" %echo)
 
 try:
   result = ofl.openscad(scad, parms=parms, echo_f=echo, hw=True, dry_run=args.dry_run, nightly=args.nightly)
+  if result and result.returncode != 0:
+    raise RuntimeError(result.returncode)
   # Se arriva qui, il comando è riuscito (rc=0)
+
+except RuntimeError as e:
+  ofl.error(f"✝ openscad failed with message '{e}'")
+  cat(echo)
+  exit(e)
 
 except subprocess.CalledProcessError as e:
   # Se il comando fallisce (rc!=0), Python salta direttamente qui
