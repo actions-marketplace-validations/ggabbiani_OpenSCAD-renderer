@@ -60,7 +60,7 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=F
   if echo_f is None:
     echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
   debug("echo_f: % s" %echo_f)
-  cmd = ([nightly_cmd] if nightly else [oscad_cmd]) + parms
+  cmd = ([nightly_cmd,"--appimage-extract-and-run"] if nightly else [oscad_cmd]) + parms
   # NOTE: we cannot use the --hardwarnings parameter because of the useless
   # 'Viewall and autocenter' warn
   if hw:
@@ -91,7 +91,7 @@ INFO    = 3
 DEBUG   = 4
 
 oscad_cmd = "openscad" if platform.system()=='Linux' else "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" if platform.system()=='Darwin' else 'Badula'
-nightly_cmd = "/opt/OpenSCAD-nightly/OpenSCAD.AppImage --appimage-extract-and-run"
+nightly_cmd = "/opt/OpenSCAD-nightly/OpenSCAD.AppImage"
 
 verbosity = ERROR
 path      = Path(__file__).parent.parent.absolute()
