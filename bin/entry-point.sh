@@ -46,7 +46,7 @@ VERBOSE="1"
 MODE="foundation"
 DRY="OFF"
 
-set -x
+# set -x
 
 echo "PARAMETERS=$@"
 
