@@ -91,7 +91,7 @@ INFO    = 3
 DEBUG   = 4
 
 oscad_cmd = "openscad" if platform.system()=='Linux' else "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" if platform.system()=='Darwin' else 'Badula'
-nightly_cmd = "/opt/OpenSCAD-nightly/OpenSCAD.AppImage"
+nightly_cmd = "/opt/OpenSCAD-nightly/OpenSCAD.AppImage --appimage-extract-and-run"
 
 verbosity = ERROR
 path      = Path(__file__).parent.parent.absolute()
