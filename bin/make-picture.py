@@ -120,5 +120,6 @@ except RuntimeError as e:
 except subprocess.CalledProcessError as e:
   # Se il comando fallisce (rc!=0), Python salta direttamente qui
   ofl.error(f'✝ openscad failed with RC {e.returncode}')
-  cat(echo)
+  if os.path.isfile(echo):
+    cat(echo)
   exit(e.returncode)

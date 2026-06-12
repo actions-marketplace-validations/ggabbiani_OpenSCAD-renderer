@@ -25,8 +25,10 @@ RUN dnf install -y --nodocs \
 # Crea la directory, scarica l'AppImage e imposta i permessi di esecuzione
 RUN mkdir -p /opt/OpenSCAD-nightly && \
     wget -O /opt/OpenSCAD-nightly/OpenSCAD.AppImage https://files.openscad.org/snapshots/OpenSCAD-2026.06.10-x86_64.AppImage && \
-    chmod +x /opt/OpenSCAD-nightly/OpenSCAD.AppImage && \
-    ls -l /opt/OpenSCAD-nightly/
+    chmod +x /opt/OpenSCAD-nightly/OpenSCAD.AppImage
+
+RUN file /opt/OpenSCAD-nightly/OpenSCAD.AppImage && \
+    /opt/OpenSCAD-nightly/OpenSCAD.AppImage --version || true
 
 # ambiente di lavoro
 WORKDIR /app
