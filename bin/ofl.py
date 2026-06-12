@@ -55,7 +55,7 @@ def read_lines(fname):
   with open(fname) as file:
     return file.readlines()
 
-def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=False,nightly=False):
+def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=False, nightly=False):
   scad_f  = os.path.normpath(scad_f)
   if echo_f is None:
     echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
@@ -66,6 +66,8 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=F
   # 'Viewall and autocenter' warn
   if hw:
     cmd += ["-o",echo_f]
+  if nightly:
+    cmd += ["--enable", "all"]
   cmd += [scad_f]
   if dry_run:
     print(cmd)
