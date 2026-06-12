@@ -162,7 +162,7 @@ jobs:
         uses: ./
         with:
           script:   'tests/experimental.scad'
-          openscad-nightly: true
+          nightly: true
 
       - name: Verifica e Archiviazione
         if: success()
