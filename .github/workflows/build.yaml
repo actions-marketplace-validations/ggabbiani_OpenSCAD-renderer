@@ -43,7 +43,7 @@ jobs:
 
       - name: Docker Hub Login
         if: steps.base.outputs.changed == 'yes'
-        uses: docker/login-action@v4
+        uses: docker/login-action@v4.5.2
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -82,7 +82,7 @@ jobs:
 
       - name: Docker Hub Login
         if: steps.docker.outputs.changed == 'yes'
-        uses: docker/login-action@v4
+        uses: docker/login-action@v4.5.2
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
