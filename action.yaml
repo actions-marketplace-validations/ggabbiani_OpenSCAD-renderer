@@ -10,6 +10,21 @@ inputs:
     required: false
     default: ''
 
+  color-scheme:
+    description: 'OpenSCAD color scheme: Cornfield, Metallic, Sunset, Starnight, BeforeDawn, Nature, DeepOcean, Solarized, Tomorrow, Tomorrow Night, Monotone'
+    required: false
+    default: 'Cornfield'
+
+  nightly:
+    description: 'Nightly version of OpenSCAD'
+    required: false
+    default: false
+
+  openscad-path:
+    description: 'The OPENSCADPATH for custom user libraries'
+    required: false
+    default: ''
+
   picture:
     description: 'Target picture name (with extension)'
     required: false
@@ -41,7 +56,10 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ggabbiani/renderer:v1.0.0'
+  image: 'docker://ggabbiani/renderer:latest'
+  # Passiamo OPENSCADPATH come vera variabile d'ambiente del container
+  env:
+    OPENSCADPATH: ${{ inputs.openscad-path }}
   args:
     - --resolution
     - ${{ inputs.resolution }}
@@ -49,9 +67,12 @@ runs:
     - ${{ inputs.camera }}
     - --projection
     - ${{ inputs.projection }}
+    - ${{ inputs.nightly == 'true' && '--nightly' || '' }}
     - --image
     - ${{ inputs.picture }}
     - --view-axes
     - ${{ inputs.view-axes }}
     - ${{ inputs.render == 'true' && '--render' || '' }}
+    - --colorscheme
+    - ${{ inputs.color-scheme }}
     - ${{ inputs.script }}

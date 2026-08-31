@@ -28,7 +28,7 @@ jobs:
 
       # Checks-out repo on $GITHUB_WORKSPACE
       - name: Project checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Number of commits to fetch. 0 indicates all history for all branches and tags (default 1).
           fetch-depth: '0'
@@ -43,36 +43,32 @@ jobs:
 
       - name: Docker Hub Login
         if: steps.base.outputs.changed == 'yes'
-        uses: docker/login-action@v4
+        uses: docker/login-action@v4.6.0
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Base build and push
+      - name: Base build and push via Makefile
         if: steps.base.outputs.changed == 'yes'
         run: |
-          make docker/.base BASE_IMG="${{ env.DOCKER_IMAGE }}"
+          make docker/.base
 
   docker-image:
     name: Renderer Docker image
     needs: [base-image]
     runs-on: ubuntu-latest
 
-    env:
-      IMAGE_NAME: git-actions:fedora
-      DOCKER_IMAGE: "${{ vars.DOCKERHUB_USERNAME }}/renderer:v1.0.0"
-
     steps:
 
       # Checks-out repo on $GITHUB_WORKSPACE
       - name: Project checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Number of commits to fetch. 0 indicates all history for all branches
           # and tags (default 1).
           fetch-depth: '0'
 
-      # Check if anything in docker/fedora/* or /bin/* changed with the last commit.
+      # Check if anything in docker/renderer/* or /bin/* changed with the last commit.
       # See also
       # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
       # and
@@ -81,12 +77,12 @@ jobs:
         id: docker
         run: |
           set +e
-          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/renderer/' -e '^bin/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/Makefile' -e '^docker/renderer/' -e '^bin/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
 
       - name: Docker Hub Login
         if: steps.docker.outputs.changed == 'yes'
-        uses: docker/login-action@v4
+        uses: docker/login-action@v4.6.0
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -94,7 +90,7 @@ jobs:
       - name: Build and Push via Makefile
         if: steps.docker.outputs.changed == 'yes'
         run: |
-          make RENDERER_IMG=${{ env.DOCKER_IMAGE }}
+          make docker/.renderer
 
   tests:
     name: Regression tests
@@ -103,7 +99,7 @@ jobs:
 
     steps:
       - name: Code checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Default inputs test
         uses: ./ # repo path where to find action.yaml
@@ -132,7 +128,7 @@ jobs:
 
     steps:
       - name: Code checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Parameter set 1
         uses: ./
@@ -152,3 +148,25 @@ jobs:
         with:
           path: tests/pset-*.png
           name: parameter-sets
+
+  nightly-build:
+    name: Nightly built experimental feature test
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v7
+
+      - name: Experimental features
+        uses: ./
+        with:
+          script:   'tests/experimental.scad'
+          nightly: true
+
+      - name: Verifica e Archiviazione
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          path: tests/experimental.png
+          name: experimental-tests

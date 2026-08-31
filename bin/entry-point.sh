@@ -19,10 +19,11 @@ trap 'on_exit $? $test' EXIT
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-c|--camera <position>] [-p|--projection <projection>] [-r|--resolution <resolution>] [-i|--image <image path>] [--render] SCRIPT
+$(basename $0) [-?|-h|--help] [-c|--camera <position>] [--colorscheme <scheme>] [-p|--projection <projection>] [-r|--resolution <resolution>] [-i|--image <image path>] [--render] SCRIPT
 
   -?|-h|--help      this help
   -c|--camera       OpenSCAD camera position
+  --colorscheme     OpenSCAD color scheme
   -i|--image        image path
   -p|--projection   'ortho' or 'perspective'
   -r|--resolution   target resolution in 'openscad' format i.e. 800x600
@@ -64,11 +65,22 @@ while (( "$#" )); do
       fi
       shift 2
       ;;
+    --colorscheme)
+      if [ -n "$2" ]; then
+        COLORSCHEME="--colorscheme=$2"
+      fi
+      shift 2
+      ;;
     -i|--image)
       if [ -n "$2" ]; then
         PIC_PATH="$2"
       fi
       shift 2
+      ;;
+    --nightly)
+      NIGHTLY="$1"
+      info "NIGHTLY=$NIGHTLY"
+      shift
       ;;
     -p|--projection)
       if [ -n "$2" ]; then
@@ -135,7 +147,7 @@ PIC_FILE=$(basename "$PIC_PATH")
 
 echo "RENDER=$RENDER"
 
-xvfb-run -d $APP/make-picture.py $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$SCRIPT" $RENDER "$PIC_PATH"
+xvfb-run -d $APP/make-picture.py -v 4 $RESOLUTION $CAMERA $PROJECTION $VIEW_AXES "$COLORSCHEME" "$SCRIPT" $RENDER $NIGHTLY "$PIC_PATH"
 magick "$PIC_DIR/unscaled-$PIC_FILE" $RESIZE "$PIC_PATH"
 rm "$PIC_DIR/unscaled-$PIC_FILE"
 

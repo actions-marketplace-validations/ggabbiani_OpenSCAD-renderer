@@ -15,30 +15,49 @@ RUN_CMD		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shel
 BUILD_CMD	= docker build
 BUILDX_CMD	= docker buildx build
 
+RNDR_IMG	= ggabbiani/renderer
+RNDR_VER	= v1.3.0
+
+BASE_IMG	= ggabbiani/renderer-base
+BASE_VER	= v1.1.0
+
+
 .DEFAULT_GOAL := help
 
-all: fedora	## Build images in all the target platforms
+.PHONY: base renderer
 
-.base:
+all: base renderer	## Build images in all the target platforms
+
+base:	## build base image without push
 	$(call target-prologue)
-	$(if $(BASE_IMG), , $(error BASE_IMG undefined.))
-	cd base && docker build -t base .
-	docker tag base $(BASE_IMG)
-	docker push $(BASE_IMG)
+	cd base && docker build -t $(BASE_IMG):$(BASE_VER) .
+	docker tag $(BASE_IMG):$(BASE_VER) $(BASE_IMG):latest
+# 	docker push -a $(BASE_IMG)
 	$(call target-epilogue-success)
 
-.renderer:
+.base: base
 	$(call target-prologue)
-	$(if $(RENDERER_IMG), , $(error BASE_IMG undefined.))
+	docker push -a $(BASE_IMG)
+	$(call target-epilogue-success)
+
+renderer:	## build renderer image without push
+	$(call target-prologue)
 	cd renderer && ( [ -d app ] || mkdir app ) && cp -a \
 		$(BIN)/entry-point.sh \
 		$(BIN)/functions.sh \
 		$(BIN)/make-picture.py \
 		$(BIN)/ofl.py \
 		app/ \
-	&& docker build -t renderer .
-	docker tag renderer $(RENDERER_IMG)
-	docker push $(RENDERER_IMG)
+	&& docker build -t $(RNDR_IMG):$(RNDR_VER) .
+	docker tag $(RNDR_IMG):$(RNDR_VER) $(RNDR_IMG):latest
+	# push all the local tags for the renderer (version and latest)
+# 	docker push -a $(RNDR_IMG)
+	$(call target-epilogue-success)
+
+.renderer: renderer
+	$(call target-prologue)
+	# push all the local tags for the renderer (version and latest)
+	docker push -a $(RNDR_IMG)
 	$(call target-epilogue-success)
 
 clean: ## Clean all local Docker images
@@ -62,9 +81,6 @@ clean: ## Clean all local Docker images
 		--load \
 		-t $(IMAGE):$(DISTRO) .
 	$(call target-epilogue-success)
-
-renderer: RENDERER_IMG=ggabbiani/renderer:v1.0.0
-renderer: .renderer	## Builds a Fedora based image
 
 help: ## Shows this help
 	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

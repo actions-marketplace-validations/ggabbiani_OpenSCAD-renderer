@@ -24,13 +24,20 @@ class Version:
     def __init__(self,major=None,minor=None,patch=None):
         if major is None and minor is None and patch is None:
             try:
-                tag = subprocess.check_output(['git', 'describe', '--abbrev=0'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+                # Usiamo shell=True e passiamo la stringa esatta del terminale
+                tag = subprocess.check_output(
+                    'git describe --tags --abbrev=0 --match="v*.*.*"',
+                    stderr=subprocess.STDOUT,
+                    shell=True,
+                    text=True
+                ).strip()[1:]
+                # tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match=v*.*.*'], stderr=subprocess.STDOUT, text=True).strip()[1:]
             except subprocess.CalledProcessError as exc_info:
                 raise RuntimeError(str(exc_info.output))
             regex   = re.compile(r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
             match   = regex.match(tag)
             if not match:
-                raise RuntimeError(f"{version} does not match the expected version pattern.")
+                raise RuntimeError(f"{tag} does not match the expected version pattern.")
             self.major  = int(match.group("major"))
             self.minor  = int(match.group("minor"))
             self.patch  = int(match.group("patch"))
@@ -62,7 +69,13 @@ def handler(signum, frame):
 
 def git_version_tag():
     try:
-        git_tag = subprocess.check_output(['git', 'describe', '--abbrev=0'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+        # git_tag = subprocess.check_output(['git', 'describe', '--abbrev=0', '--match=\"v*.*.*\"'], stderr=subprocess.STDOUT, universal_newlines=True).strip("\n")[1:]
+        git_tag = subprocess.check_output(
+            'git describe --tags --abbrev=0 --match="v*.*.*"',
+            stderr=subprocess.STDOUT,
+            shell=True,
+            text=True
+        ).strip()[1:]
     except subprocess.CalledProcessError as exc_info:
         raise RuntimeError(str(exc_info.output))
     return git_tag
@@ -86,7 +99,7 @@ def parse_args():
     m_excl = parser.add_mutually_exclusive_group()
     m_excl.add_argument('-M', '--major',  action='store_true', help='auto increment current major release number')
     m_excl.add_argument('-m', '--minor',  action='store_true', help='auto increment current minor release number')
-    m_excl.add_argument('-p', '--patch',  action='store_true', help='auto increment current patch release number (default)', default=True)
+    m_excl.add_argument('-p', '--patch',  action='store_true', help='auto increment current patch release number (default)')
     args = parser.parse_args()
     ofl.verbosity   = args.verbosity
     return args

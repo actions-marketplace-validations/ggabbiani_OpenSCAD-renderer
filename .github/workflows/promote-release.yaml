@@ -7,23 +7,33 @@ on:
 jobs:
   update-major-tag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 1. CRITICO: Permette all'azione di fare il push del tag
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Update Floating Major Tag
         run: |
           # Il tag della release pubblicata (es. v1.0.2)
-          TAG_VERSION=${{ github.event.release.tag_name }}
+          TAG_VERSION="${{ github.event.release.tag_name }}"
           # Estrae la major (es. v1)
-          MAJOR_VERSION=${TAG_VERSION%%.*}
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          MAJOR_VERSION="${TAG_VERSION%%.*}"
 
           echo "Promoting $MAJOR_VERSION to point to $TAG_VERSION"
 
-          git tag -fa $MAJOR_VERSION -m "Update $MAJOR_VERSION to $TAG_VERSION"
+          # 2. Configurazione dell'autenticazione remota corretta
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # 3. Forziamo il recupero dell'ultimo stato remoto del tag major prima di sovrascriverlo
+          git fetch origin refs/tags/$MAJOR_VERSION:refs/tags/$MAJOR_VERSION || true
+
+          # Spostiamo il tag localmente sul commit associato al tag della release
+          git tag -fa $MAJOR_VERSION -m "Update $MAJOR_VERSION to $TAG_VERSION" "$TAG_VERSION"
+
+          # Push forzato del tag aggiornato
           git push origin $MAJOR_VERSION --force

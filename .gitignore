@@ -1,2 +1,5 @@
-docker/renderer/app
 bin/__pycache__
+docker/renderer/app/entry-point.sh
+docker/renderer/app/functions.sh
+docker/renderer/app/make-picture.py
+docker/renderer/app/ofl.py

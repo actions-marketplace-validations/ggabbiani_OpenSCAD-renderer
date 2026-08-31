@@ -55,20 +55,23 @@ def read_lines(fname):
   with open(fname) as file:
     return file.readlines()
 
-def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=False):
+def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=False, nightly=False):
   scad_f  = os.path.normpath(scad_f)
   if echo_f is None:
     echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
   debug("echo_f: % s" %echo_f)
-  cmd = [oscad_cmd] + parms
+  cmd = ([nightly_cmd,"--appimage-extract-and-run"] if nightly else [oscad_cmd]) + parms
   # NOTE: we cannot use the --hardwarnings parameter because of the useless
   # 'Viewall and autocenter' warn
   if hw:
     cmd += ["-o",echo_f]
+  if nightly:
+    cmd += ["--enable", "all"]
   cmd += [scad_f]
   if dry_run:
     print(cmd)
   else:
+    info("Exec          : % s" %cmd)
     result = subprocess.run(cmd,capture_output=True,text=True,check=not must_fail)
     debug("result: % s" %result)
     if hw:
@@ -77,8 +80,9 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=F
         # negative lookahead for excluding the useless 'Viewall and autocenter' warn
         match   = re.findall(r"^(WARNING|ERROR): (?!Viewall and autocenter disabled in favor of \$vp\*)",line)
         if match:
-          result.returncode = 1
-    return result
+          raise RuntimeError(line.rstrip())
+    else:
+      return result
 
 SILENT  = 0
 ERROR   = 1
@@ -87,15 +91,8 @@ INFO    = 3
 DEBUG   = 4
 
 oscad_cmd = "openscad" if platform.system()=='Linux' else "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" if platform.system()=='Darwin' else 'Badula'
+nightly_cmd = "/opt/OpenSCAD-nightly/OpenSCAD.AppImage"
 
 verbosity = ERROR
-oscad     = [
-  oscad_cmd,
-  "--hardwarnings"
-]
 path      = Path(__file__).parent.parent.absolute()
 lib       = path.joinpath('lib')
-
-# if __name__ == "__main__":
-#     import sys
-#     blah blah ...
